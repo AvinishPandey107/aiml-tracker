@@ -1595,6 +1595,78 @@
     white-space: nowrap; box-shadow: var(--ice-sheen);
   }
 
+  /* Drill-Down Internal Leaderboard Styles */
+  .drilldown-panel {
+    background: rgba(17, 22, 34, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    border-radius: var(--radius-lg);
+    padding: 22px 20px;
+    margin-bottom: 24px;
+    box-shadow: var(--ice-sheen), 0 8px 32px rgba(0,0,0,0.3);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .drilldown-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .drilldown-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .drilldown-select {
+    background: #0b0f17;
+    color: #f1f5f9;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    outline: none;
+    cursor: pointer;
+  }
+  .drilldown-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+  }
+  .drilldown-single-note {
+    text-align: center;
+    padding: 14px 16px;
+    color: var(--mint);
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(110, 231, 183, 0.08);
+    border: 1px dashed rgba(110, 231, 183, 0.3);
+    border-radius: 10px;
+    margin-top: 12px;
+  }
+  .drilldown-btn-sm {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .drilldown-btn-sm:hover {
+    background: var(--accent);
+    color: #07090e;
+  }
+
   /* Help & Support */
   .help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   @media (max-width: 900px) { .help-grid { grid-template-columns: 1fr; } }
@@ -6189,6 +6261,8 @@ init();
   let rankSearchFilter = '';
   let cachedLeaderboardData = null;
   let isFetchingLeaderboard = false;
+  let selectedCollegeRank = null;
+  let selectedCountryRank = null;
 
   function switchRankTab(scope, btn) {
     currentRankScope = scope;
@@ -6202,6 +6276,20 @@ init();
   function handleRankSearch(val) {
     rankSearchFilter = (val || '').toLowerCase().trim();
     renderLeaderboard(false);
+  }
+
+  function selectCollegeDrilldown(collegeName) {
+    selectedCollegeRank = collegeName;
+    renderLeaderboard(false);
+    const panel = document.querySelector('.drilldown-panel');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function selectCountryDrilldown(countryName) {
+    selectedCountryRank = countryName;
+    renderLeaderboard(false);
+    const panel = document.querySelector('.drilldown-panel');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   async function renderLeaderboard(fetchFromRemote = true) {
@@ -6292,7 +6380,9 @@ init();
 
     let allItems = realLearners;
 
-    // GLOBAL RANKING
+    // =========================================================================
+    // 1. GLOBAL RANKING
+    // =========================================================================
     if (currentRankScope === 'global') {
       allItems.sort((a, b) => b.xp - a.xp);
       const myRank = allItems.findIndex(x => x.isMe) + 1;
@@ -6326,16 +6416,17 @@ init();
         );
       }
 
-      let html = filtered.map((item, idx) => {
+      let html = filtered.map((item) => {
         const trueRank = allItems.indexOf(item) + 1;
         const rankBadge = trueRank === 1 ? '🥇' : (trueRank === 2 ? '🥈' : (trueRank === 3 ? '🥉' : `#${trueRank}`));
+        const lvl = typeof getLevel === 'function' ? getLevel(item.xp) : { level: 1, title: 'Novice' };
         return `
           <div class="rank-row ${item.isMe ? 'is-me' : ''}">
             <div class="rank-pos ${trueRank <= 3 ? 'top-3' : ''}">${rankBadge}</div>
             <div class="rank-avatar">${item.avatar}</div>
             <div class="rank-user-info">
               <div class="rank-name">${item.name} ${item.isMe ? '<span style="font-size:10px; background:var(--accent); color:#07090e; padding:1px 6px; border-radius:4px; font-weight:700;">YOU</span>' : ''}</div>
-              <div class="rank-meta">${item.college} · <span>${item.country}</span></div>
+              <div class="rank-meta">${item.college} · <span>${item.country}</span> · Lv ${lvl.level}</div>
             </div>
             <div class="rank-streak">🔥 ${item.streak}d</div>
             <div class="rank-xp">${item.xp} XP</div>
@@ -6353,7 +6444,9 @@ init();
 
       listEl.innerHTML = html;
 
-    // COLLEGE RANKING
+    // =========================================================================
+    // 2. COLLEGE RANKING (WITH INTERNAL CAMPUS LEADERBOARD DRILL-DOWN)
+    // =========================================================================
     } else if (currentRankScope === 'college') {
       const collegeMap = {};
       allItems.forEach(item => {
@@ -6367,16 +6460,37 @@ init();
         if (item.isMe) collegeMap[col].hasMe = true;
       });
 
+      // Sort each college's internal students by XP descending
+      Object.values(collegeMap).forEach(c => {
+        c.learners.sort((a, b) => b.xp - a.xp);
+      });
+
       let collegeList = Object.values(collegeMap).sort((a, b) => b.totalXp - a.totalXp);
       const myColRank = collegeList.findIndex(c => c.hasMe) + 1;
+
+      // Select target college for internal drill-down view (defaults to myCollege or top college)
+      if (!selectedCollegeRank || !collegeMap[selectedCollegeRank]) {
+        if (myProfile.college && collegeMap[myProfile.college]) {
+          selectedCollegeRank = myProfile.college;
+        } else {
+          selectedCollegeRank = collegeList[0]?.college || myCollege;
+        }
+      }
+
+      const activeCampusData = collegeMap[selectedCollegeRank] || { college: selectedCollegeRank, totalXp: myXp, learners: allItems.filter(x => x.isMe), topStreak: myStreak, hasMe: true };
+      const campusLearners = activeCampusData.learners || [];
+      const isMyCampus = (myProfile.college && myProfile.college.trim() === selectedCollegeRank.trim()) || activeCampusData.hasMe;
+      const myCampusRank = campusLearners.findIndex(s => s.isMe) + 1;
 
       if (bannerEl) {
         bannerEl.innerHTML = `
           <div style="font-size: 28px;">🎓</div>
           <div class="my-standing-details">
-            <div class="my-standing-title">Your Institution: ${myCollege} (Rank #${myColRank || '—'})</div>
+            <div class="my-standing-title">Your Institution: ${myCollege} (Campus Rank #${myCampusRank || 1} · Global #${myColRank || 1})</div>
             <div class="my-standing-sub">
-              ${myProfile.college ? 'Represent your campus! Every topic you complete elevates your university.' : 'Set your college in Profile Settings to link with university peers.'}
+              ${campusLearners.length === 1 && isMyCampus 
+                ? '🎉 You are #1 on your campus! Invite your batchmates to compete.' 
+                : (isMyCampus ? 'Every curriculum module you finish earns XP and elevates your campus on the global leaderboard.' : `Exploring internal student standings for <strong>${selectedCollegeRank}</strong>.`)}
             </div>
           </div>
           <div class="my-standing-metric">
@@ -6386,21 +6500,97 @@ init();
         `;
       }
 
+      // Build options for college switcher dropdown
+      const collegeOptionsHtml = collegeList.map(c => `
+        <option value="${c.college.replace(/"/g, '&quot;')}" ${c.college === selectedCollegeRank ? 'selected' : ''}>
+          ${c.college} (${c.learners.length} student${c.learners.length > 1 ? 's' : ''})
+        </option>
+      `).join('');
+
+      // Build internal student rows for selected campus
+      let internalStudentsHtml = campusLearners.map((st, idx) => {
+        const rankNum = idx + 1;
+        const rankBadge = rankNum === 1 ? '🥇' : (rankNum === 2 ? '🥈' : (rankNum === 3 ? '🥉' : `#${rankNum}`));
+        const lvl = typeof getLevel === 'function' ? getLevel(st.xp) : { level: 1, title: 'Novice' };
+        return `
+          <div class="rank-row ${st.isMe ? 'is-me' : ''}" style="margin-bottom: 8px;">
+            <div class="rank-pos ${rankNum <= 3 ? 'top-3' : ''}">${rankBadge}</div>
+            <div class="rank-avatar">${st.isMe ? '⭐' : '🎓'}</div>
+            <div class="rank-user-info">
+              <div class="rank-name">${st.name} ${st.isMe ? '<span style="font-size:10px; background:var(--accent); color:#07090e; padding:1px 6px; border-radius:4px; font-weight:700;">YOU</span>' : ''}</div>
+              <div class="rank-meta">Lv ${lvl.level} (${lvl.title}) · <span>🔥 ${st.streak}d streak</span> · ${st.country}</div>
+            </div>
+            <div class="rank-xp">${st.xp} XP</div>
+          </div>
+        `;
+      }).join('');
+
+      let html = `
+        <!-- INTERNAL CAMPUS LEADERBOARD -->
+        <div class="drilldown-panel">
+          <div class="drilldown-header-bar">
+            <div>
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mint); font-weight: 700; margin-bottom: 3px;">
+                CAMPUS LEADERBOARD
+              </div>
+              <div class="drilldown-title">
+                <span>🏛️</span>
+                <span>${selectedCollegeRank}</span>
+                <span style="font-size: 11.5px; background: rgba(110,231,183,0.12); color: var(--mint); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(110,231,183,0.25);">
+                  ${campusLearners.length} Student${campusLearners.length > 1 ? 's' : ''} · ${activeCampusData.totalXp} XP
+                </span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 12px; color: var(--muted); font-family: var(--font-mono);">Institution:</span>
+              <select class="drilldown-select" onchange="selectCollegeDrilldown(this.value)">
+                ${collegeOptionsHtml}
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column;">
+            ${internalStudentsHtml}
+          </div>
+
+          ${campusLearners.length === 1 ? `
+            <div class="drilldown-single-note">
+              🎉 You are #1 on your campus! Invite your batchmates to compete.
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- ALL CAMPUSES OVERVIEW -->
+        <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #f1f5f9; margin: 26px 0 12px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span>🌐 All Competing Institutions (${collegeList.length})</span>
+          <span style="font-size: 12px; color: var(--muted); font-weight: 400;">Click any campus to inspect internal students</span>
+        </div>
+      `;
+
+      let filteredColleges = collegeList;
       if (rankSearchFilter) {
-        collegeList = collegeList.filter(c => c.college.toLowerCase().includes(rankSearchFilter));
+        filteredColleges = filteredColleges.filter(c => c.college.toLowerCase().includes(rankSearchFilter));
       }
 
-      let html = collegeList.map((col, idx) => {
+      html += filteredColleges.map((col, idx) => {
         const rankBadge = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx + 1}`));
+        const isSelected = col.college === selectedCollegeRank;
+        const safeColName = col.college.replace(/'/g, "\\'");
         return `
-          <div class="rank-row ${col.hasMe ? 'is-me' : ''}">
+          <div class="rank-row ${col.hasMe ? 'is-me' : ''}" style="${isSelected ? 'border-color: var(--mint); background: rgba(110,231,183,0.06);' : ''} cursor: pointer;" onclick="selectCollegeDrilldown('${safeColName}')">
             <div class="rank-pos ${idx < 3 ? 'top-3' : ''}">${rankBadge}</div>
             <div class="rank-avatar">🏛️</div>
             <div class="rank-user-info">
-              <div class="rank-name">${col.college} ${col.hasMe ? '<span style="font-size:10px; background:var(--mint); color:#07090e; padding:1px 6px; border-radius:4px; font-weight:700;">MY CAMPUS</span>' : ''}</div>
+              <div class="rank-name">
+                ${col.college} 
+                ${col.hasMe ? '<span style="font-size:10px; background:var(--mint); color:#07090e; padding:1px 6px; border-radius:4px; font-weight:700;">MY CAMPUS</span>' : ''}
+                ${isSelected ? '<span style="font-size:10px; background:rgba(56,189,248,0.2); color:#38bdf8; padding:1px 6px; border-radius:4px; font-weight:700;">ACTIVE VIEW</span>' : ''}
+              </div>
               <div class="rank-meta">${col.learners.length} active learner${col.learners.length > 1 ? 's' : ''} · Top streak: ${col.topStreak}d</div>
             </div>
-            <div class="rank-streak">👥 ${col.learners.length}</div>
+            <button type="button" class="drilldown-btn-sm" onclick="event.stopPropagation(); selectCollegeDrilldown('${safeColName}')">
+              ${isSelected ? 'Viewing Students ▾' : 'View Students →'}
+            </button>
             <div class="rank-xp">${col.totalXp} XP</div>
           </div>
         `;
@@ -6416,7 +6606,9 @@ init();
 
       listEl.innerHTML = html;
 
-    // COUNTRY RANKING
+    // =========================================================================
+    // 3. COUNTRY RANKING (WITH INTERNAL NATIONAL LEADERBOARD DRILL-DOWN)
+    // =========================================================================
     } else if (currentRankScope === 'country') {
       const countryMap = {};
       allItems.forEach(item => {
@@ -6430,16 +6622,37 @@ init();
         if (item.isMe) countryMap[ctry].hasMe = true;
       });
 
+      // Sort each country's internal engineers by XP descending
+      Object.values(countryMap).forEach(c => {
+        c.learners.sort((a, b) => b.xp - a.xp);
+      });
+
       let countryList = Object.values(countryMap).sort((a, b) => b.totalXp - a.totalXp);
       const myCtryRank = countryList.findIndex(c => c.hasMe) + 1;
+
+      // Select target nation for internal drill-down view (defaults to myCountry or top country)
+      if (!selectedCountryRank || !countryMap[selectedCountryRank]) {
+        if (myProfile.country && countryMap[myProfile.country]) {
+          selectedCountryRank = myProfile.country;
+        } else {
+          selectedCountryRank = countryList[0]?.country || myCountry;
+        }
+      }
+
+      const activeCountryData = countryMap[selectedCountryRank] || { country: selectedCountryRank, totalXp: myXp, learners: allItems.filter(x => x.isMe), topStreak: myStreak, hasMe: true };
+      const nationalLearners = activeCountryData.learners || [];
+      const isMyCountry = (myProfile.country && myProfile.country.trim() === selectedCountryRank.trim()) || activeCountryData.hasMe;
+      const myNatRank = nationalLearners.findIndex(s => s.isMe) + 1;
 
       if (bannerEl) {
         bannerEl.innerHTML = `
           <div style="font-size: 28px;">🏳️</div>
           <div class="my-standing-details">
-            <div class="my-standing-title">Your Nation: ${myCountry} (Rank #${myCtryRank || '—'})</div>
+            <div class="my-standing-title">Your Rank in ${myCountry}: #${myNatRank || 1} (Global Nation #${myCtryRank || 1})</div>
             <div class="my-standing-sub">
-              Compete on the world stage. Top countries produce breakthrough frontier models.
+              ${nationalLearners.length === 1 && isMyCountry
+                ? `🌟 You are #1 in ${myCountry}! Invite peers to represent your nation.`
+                : (isMyCountry ? `You are representing ${myCountry} against engineers worldwide.` : `Exploring national engineering talent in <strong>${selectedCountryRank}</strong>.`)}
             </div>
           </div>
           <div class="my-standing-metric">
@@ -6449,21 +6662,102 @@ init();
         `;
       }
 
+      // Build options for country switcher dropdown
+      const countryOptionsHtml = countryList.map(c => `
+        <option value="${c.country.replace(/"/g, '&quot;')}" ${c.country === selectedCountryRank ? 'selected' : ''}>
+          ${c.country} (${c.learners.length} engineer${c.learners.length > 1 ? 's' : ''})
+        </option>
+      `).join('');
+
+      // Build internal student rows for selected country
+      let internalEngineersHtml = nationalLearners.map((eng, idx) => {
+        const rankNum = idx + 1;
+        const rankBadge = rankNum === 1 ? '🥇' : (rankNum === 2 ? '🥈' : (rankNum === 3 ? '🥉' : `#${rankNum}`));
+        const lvl = typeof getLevel === 'function' ? getLevel(eng.xp) : { level: 1, title: 'Novice' };
+        return `
+          <div class="rank-row ${eng.isMe ? 'is-me' : ''}" style="margin-bottom: 8px;">
+            <div class="rank-pos ${rankNum <= 3 ? 'top-3' : ''}">${rankBadge}</div>
+            <div class="rank-avatar">${eng.isMe ? '⭐' : '🚀'}</div>
+            <div class="rank-user-info">
+              <div class="rank-name">${eng.name} ${eng.isMe ? '<span style="font-size:10px; background:var(--accent); color:#07090e; padding:1px 6px; border-radius:4px; font-weight:700;">YOU</span>' : ''}</div>
+              <div class="rank-meta">🏛️ ${eng.college} · Lv ${lvl.level} (${lvl.title}) · <span>🔥 ${eng.streak}d streak</span></div>
+            </div>
+            <div class="rank-xp">${eng.xp} XP</div>
+          </div>
+        `;
+      }).join('');
+
+      let html = `
+        <!-- INTERNAL NATIONAL LEADERBOARD -->
+        <div class="drilldown-panel">
+          <div class="drilldown-header-bar">
+            <div>
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--violet); font-weight: 700; margin-bottom: 3px;">
+                NATIONAL LEADERBOARD
+              </div>
+              <div class="drilldown-title">
+                <span>🏳️</span>
+                <span>${selectedCountryRank}</span>
+                <span style="font-size: 11.5px; background: rgba(129,140,248,0.12); color: var(--violet); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(129,140,248,0.25);">
+                  ${nationalLearners.length} Engineer${nationalLearners.length > 1 ? 's' : ''} · ${activeCountryData.totalXp} XP
+                </span>
+                ${isMyCountry && myNatRank ? `
+                  <span style="font-size: 11.5px; background: rgba(110,231,183,0.15); color: var(--mint); padding: 2px 8px; border-radius: 6px; font-weight: 700; border: 1px solid rgba(110,231,183,0.3);">
+                    Your Rank in ${selectedCountryRank}: #${myNatRank}
+                  </span>
+                ` : ''}
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 12px; color: var(--muted); font-family: var(--font-mono);">Nation:</span>
+              <select class="drilldown-select" onchange="selectCountryDrilldown(this.value)">
+                ${countryOptionsHtml}
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column;">
+            ${internalEngineersHtml}
+          </div>
+
+          ${nationalLearners.length === 1 ? `
+            <div class="drilldown-single-note">
+              🌟 You are #1 in ${selectedCountryRank}! Invite peers to represent your nation.
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- ALL COUNTRIES OVERVIEW -->
+        <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #f1f5f9; margin: 26px 0 12px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span>🌐 All Competing Nations (${countryList.length})</span>
+          <span style="font-size: 12px; color: var(--muted); font-weight: 400;">Click any country to inspect internal engineers</span>
+        </div>
+      `;
+
+      let filteredCountries = countryList;
       if (rankSearchFilter) {
-        countryList = countryList.filter(c => c.country.toLowerCase().includes(rankSearchFilter));
+        filteredCountries = filteredCountries.filter(c => c.country.toLowerCase().includes(rankSearchFilter));
       }
 
-      let html = countryList.map((ctry, idx) => {
+      html += filteredCountries.map((ctry, idx) => {
         const rankBadge = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx + 1}`));
+        const isSelected = ctry.country === selectedCountryRank;
+        const safeCtryName = ctry.country.replace(/'/g, "\\'");
         return `
-          <div class="rank-row ${ctry.hasMe ? 'is-me' : ''}">
+          <div class="rank-row ${ctry.hasMe ? 'is-me' : ''}" style="${isSelected ? 'border-color: var(--violet); background: rgba(129,140,248,0.06);' : ''} cursor: pointer;" onclick="selectCountryDrilldown('${safeCtryName}')">
             <div class="rank-pos ${idx < 3 ? 'top-3' : ''}">${rankBadge}</div>
             <div class="rank-avatar">🌐</div>
             <div class="rank-user-info">
-              <div class="rank-name">${ctry.country} ${ctry.hasMe ? '<span style="font-size:10px; background:var(--violet); color:#fff; padding:1px 6px; border-radius:4px; font-weight:700;">MY NATION</span>' : ''}</div>
+              <div class="rank-name">
+                ${ctry.country} 
+                ${ctry.hasMe ? '<span style="font-size:10px; background:var(--violet); color:#fff; padding:1px 6px; border-radius:4px; font-weight:700;">MY NATION</span>' : ''}
+                ${isSelected ? '<span style="font-size:10px; background:rgba(56,189,248,0.2); color:#38bdf8; padding:1px 6px; border-radius:4px; font-weight:700;">ACTIVE VIEW</span>' : ''}
+              </div>
               <div class="rank-meta">${ctry.learners.length} active engineer${ctry.learners.length > 1 ? 's' : ''} · Best streak: ${ctry.topStreak}d</div>
             </div>
-            <div class="rank-streak">🔥 ${ctry.topStreak}d</div>
+            <button type="button" class="drilldown-btn-sm" onclick="event.stopPropagation(); selectCountryDrilldown('${safeCtryName}')">
+              ${isSelected ? 'Viewing Engineers ▾' : 'View Engineers →'}
+            </button>
             <div class="rank-xp">${ctry.totalXp} XP</div>
           </div>
         `;
