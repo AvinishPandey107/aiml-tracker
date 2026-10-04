@@ -28,18 +28,3 @@ Everything runs from a single HTML file—featuring zero build steps, hardware-a
 
 ---
 
-## 🛠️ Tech Stack
-
-- **Frontend**: Pure Vanilla HTML5, CSS3, JavaScript (ES6+)
-- **Backend / Auth / DB**: [Supabase](https://supabase.com/) (Auth & PostgreSQL JSON storage)
-- **Audio & Physics**: Web Audio API & HTML5 Canvas
-- **Typography**: Inter, Plus Jakarta Sans, Space Mono
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/](https://github.com/)<your-username>/aiml-tracker.git
-cd aiml-tracker
