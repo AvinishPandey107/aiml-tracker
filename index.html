@@ -2605,8 +2605,25 @@
 
 </main>
 
-<footer>
-  Built for your journey 🚀 · <span>AI/ML Mastery Tracker</span> · Stay consistent, think global
+<!-- TRANSPARENT OPEN-SOURCE EDUCATIONAL FOOTER -->
+<footer style="margin-top: 60px; padding: 40px 24px; border-top: 1px solid var(--border); text-align: center; font-size: 13px; color: var(--text-muted); line-height: 1.8; background: rgba(0,0,0,0.25);">
+  <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #f1f5f9; margin-bottom: 6px;">
+    🧠 AI/ML Mastery Tracker — An open-source educational study roadmap
+  </div>
+  <div style="margin-bottom: 8px;">
+    Created by <strong><a href="https://github.com/AvinishPandey107" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none;">Avinish Pandey</a></strong> · Free and open-source learning guide for aspiring engineers worldwide.
+  </div>
+  <div style="margin-bottom: 14px;">
+    🔗 Open-Source Repository: <a href="https://github.com/AvinishPandey107/aiml-tracker" target="_blank" rel="noopener noreferrer" style="color: var(--mint); font-weight: 600; text-decoration: underline;">https://github.com/AvinishPandey107/aiml-tracker</a>
+  </div>
+  <div style="max-width: 800px; margin: 0 auto; font-size: 12px; color: var(--muted); border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+    <p style="margin-bottom: 6px;">
+      <strong>Educational Disclaimer:</strong> This is a free educational tool. All external course and video links belong to their respective creators and organizations (such as MIT OpenCourseWare, Stanford University, 3Blue1Brown, StatQuest, freeCodeCamp, etc.).
+    </p>
+    <p style="margin: 0; font-size: 11.5px;">
+      <strong>Privacy & Security:</strong> All curriculum progress is stored locally in your browser by default. Cloud sync via Supabase is completely optional. This site does not harvest credentials or share user data.
+    </p>
+  </div>
 </footer>
 
 <!-- TOAST -->
@@ -5469,40 +5486,64 @@ init();
   </div>
 </div>
 
-<!-- 1. FULL-SCREEN AUTH GATE -->
-<div id="auth-gate" style="position: fixed; inset: 0; z-index: 99999999; background: rgba(7, 9, 14, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif;">
-  <div style="background: #111622; border: 1px solid rgba(255, 255, 255, 0.12); padding: 32px 30px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); text-align: center; color: #fff;">
-    <div style="font-size: 32px; margin-bottom: 8px;">🧠</div>
-    <h2 style="margin: 0 0 4px 0; font-size: 22px; font-weight: 700; color: #f1f5f9; letter-spacing: -0.02em;">AI/ML Mastery</h2>
-    <p style="margin: 0 0 18px 0; font-size: 13px; color: #94a3b8;">Log in, register, or sync your journey across all devices</p>
+<!-- 1. AUTH GATE (OPTIONAL PROGRESS SYNC MODAL) -->
+<div id="auth-gate" style="position: fixed; inset: 0; z-index: 99999999; background: rgba(7, 9, 14, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif;">
+  <div style="background: #111622; border: 1px solid rgba(255, 255, 255, 0.14); padding: 30px 28px; border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); text-align: center; color: #fff; position: relative; max-height: 94vh; overflow-y: auto;">
+    
+    <!-- TOP BAR WITH CLOSE BUTTON -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+      <div style="text-align: left;">
+        <div style="display: inline-block; font-size: 10.5px; font-weight: 700; color: #6ee7b7; background: rgba(110,231,183,0.12); border: 1px solid rgba(110,231,183,0.3); padding: 2px 8px; border-radius: 6px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
+          🎓 Open-Source Educational Tool
+        </div>
+        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #f1f5f9; letter-spacing: -0.02em;">AI/ML Mastery Tracker</h2>
+      </div>
+      <button type="button" onclick="dismissAuthGate()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px; line-height: 1; border-radius: 6px;" title="Explore without signing in">✕</button>
+    </div>
+
+    <p style="margin: 0 0 14px 0; font-size: 12.5px; color: #94a3b8; text-align: left; line-height: 1.5;">
+      Optional: Sign in to sync your study progress across devices. All curriculum materials, timers, and roadmap tools are <strong>100% free to use offline without an account</strong>.
+    </p>
+
+    <!-- PROMINENT GUEST BYPASS BUTTON -->
+    <button type="button" onclick="dismissAuthGate()" style="width: 100%; padding: 10px; background: rgba(110, 231, 183, 0.1); border: 1px solid rgba(110, 231, 183, 0.45); color: #6ee7b7; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12.5px; margin-bottom: 16px; transition: all 0.2s;">
+      ⚡ Continue as Guest (Explore Without Logging In) →
+    </button>
 
     <!-- AUTH MODE TOGGLE TABS -->
-    <div style="display: flex; gap: 4px; margin-bottom: 18px; background: rgba(0,0,0,0.35); padding: 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+    <div style="display: flex; gap: 4px; margin-bottom: 16px; background: rgba(0,0,0,0.35); padding: 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
       <button type="button" id="gate-tab-signin" onclick="setGateMode('signin')" style="flex: 1; padding: 7px 4px; border: none; border-radius: 6px; background: #38bdf8; color: #07090e; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s;">Sign In</button>
-      <button type="button" id="gate-tab-signup" onclick="setGateMode('signup')" style="flex: 1; padding: 7px 4px; border: none; border-radius: 6px; background: transparent; color: #94a3b8; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s;">Sign Up</button>
+      <button type="button" id="gate-tab-signup" onclick="setGateMode('signup')" style="flex: 1; padding: 7px 4px; border: none; border-radius: 6px; background: transparent; color: #94a3b8; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s;">New Account</button>
       <button type="button" id="gate-tab-forgot" onclick="setGateMode('forgot')" style="flex: 1; padding: 7px 4px; border: none; border-radius: 6px; background: transparent; color: #94a3b8; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s;">Forgot Pass</button>
     </div>
     
-    <div style="display: flex; flex-direction: column; gap: 14px; text-align: left;">
+    <div style="display: flex; flex-direction: column; gap: 13px; text-align: left;">
       <div>
-        <label style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 6px;">Email Address</label>
-        <input type="email" id="gate-email" placeholder="you@domain.com" style="width: 100%; box-sizing: border-box; padding: 11px 14px; border-radius: 8px; border: 1px solid #334155; background: #0b0f17; color: #fff; outline: none; font-size: 14px;" />
+        <label style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 5px;">
+          AI/ML Tracker Account Email (for progress sync)
+        </label>
+        <input type="email" id="gate-email" placeholder="learner@example.com" autocomplete="username" style="width: 100%; box-sizing: border-box; padding: 10px 13px; border-radius: 8px; border: 1px solid #334155; background: #0b0f17; color: #fff; outline: none; font-size: 13.5px;" />
       </div>
 
       <div id="gate-pass-group">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <label style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8;">Password</label>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+          <label style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8;">
+            AI/ML Tracker Password
+          </label>
           <a href="javascript:void(0)" onclick="setGateMode('forgot')" style="font-size: 11px; color: #38bdf8; text-decoration: none;">Forgot?</a>
         </div>
-        <input type="password" id="gate-pass" placeholder="••••••••" style="width: 100%; box-sizing: border-box; padding: 11px 14px; border-radius: 8px; border: 1px solid #334155; background: #0b0f17; color: #fff; outline: none; font-size: 14px;" />
+        <input type="password" id="gate-pass" placeholder="Create or enter tracker password" autocomplete="current-password" style="width: 100%; box-sizing: border-box; padding: 10px 13px; border-radius: 8px; border: 1px solid #334155; background: #0b0f17; color: #fff; outline: none; font-size: 13.5px;" />
+        <div style="font-size: 11px; color: #94a3b8; margin-top: 5px; line-height: 1.4;">
+          🔒 <strong>Privacy Notice:</strong> Use a password unique to this tracker. Never enter your Google, GitHub, or primary personal email password.
+        </div>
       </div>
 
       <!-- MAIN ACTION BUTTON -->
-      <button id="gate-action-btn" onclick="handleLogin()" style="width: 100%; padding: 11px; background: #38bdf8; color: #07090e; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13.5px; transition: opacity 0.2s; margin-top: 4px;">Log In</button>
+      <button id="gate-action-btn" onclick="handleLogin()" style="width: 100%; padding: 11px; background: #38bdf8; color: #07090e; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13.5px; transition: opacity 0.2s; margin-top: 2px;">Log In to Sync Progress</button>
 
       <!-- SWITCH HELPER TEXT -->
       <div id="gate-switch-hint" style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 2px;">
-        New to AI/ML Tracker? <a href="javascript:void(0)" onclick="setGateMode('signup')" style="color: #6ee7b7; font-weight: 600; text-decoration: none;">Create an account here</a>
+        New to AI/ML Tracker? <a href="javascript:void(0)" onclick="setGateMode('signup')" style="color: #6ee7b7; font-weight: 600; text-decoration: none;">Create a tracker sync account</a>
       </div>
 
       <!-- SOCIAL SECTION (HIDDEN IN FORGOT PASSWORD MODE) -->
@@ -5510,46 +5551,60 @@ init();
         <!-- OR DIVIDER -->
         <div style="display: flex; align-items: center; margin: 12px 0 10px 0; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;">
           <div style="flex: 1; height: 1px; background: #334155;"></div>
-          <span style="padding: 0 10px;">or continue with</span>
+          <span style="padding: 0 10px;">or sync with oauth</span>
           <div style="flex: 1; height: 1px; background: #334155;"></div>
         </div>
 
         <!-- SOCIAL SIGN-IN BUTTONS -->
         <div style="display: flex; flex-direction: column; gap: 8px;">
           <!-- GOOGLE -->
-          <button type="button" onclick="handleGoogleLogin()" style="width: 100%; padding: 9px; background: #ffffff; color: #1e293b; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12.5px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">
+          <button type="button" onclick="handleGoogleLogin()" style="width: 100%; padding: 9px; background: #ffffff; color: #1e293b; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">
             <svg width="17" height="17" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
-            Google
+            Sign in via Google OAuth (Supabase)
           </button>
 
           <!-- GITHUB -->
-          <button type="button" onclick="handleGitHubLogin()" style="width: 100%; padding: 9px; background: #24292e; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12.5px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">
+          <button type="button" onclick="handleGitHubLogin()" style="width: 100%; padding: 9px; background: #24292e; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
             </svg>
-            GitHub
+            Sign in via GitHub OAuth (Supabase)
           </button>
 
           <!-- DISCORD -->
-          <button type="button" onclick="handleDiscordLogin()" style="width: 100%; padding: 9px; background: #5865F2; color: #ffffff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12.5px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">
+          <button type="button" onclick="handleDiscordLogin()" style="width: 100%; padding: 9px; background: #5865F2; color: #ffffff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
               <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.894.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
             </svg>
-            Discord
+            Sign in via Discord OAuth (Supabase)
           </button>
+        </div>
+        <div style="font-size: 10.5px; color: #64748b; text-align: center; margin-top: 8px; line-height: 1.4;">
+          OAuth authentications redirect securely to official providers via Supabase Auth. We never see or store your third-party credentials.
         </div>
       </div>
     </div>
-    <div id="gate-status" style="margin-top: 14px; font-size: 12.5px; min-height: 18px; color: #f87171; line-height: 1.5;"></div>
+
+    <div id="gate-status" style="margin-top: 12px; font-size: 12px; min-height: 18px; color: #f87171; line-height: 1.5;"></div>
+
+    <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11.5px; color: #94a3b8; text-align: center;">
+      Open-Source Project: <a href="https://github.com/AvinishPandey107/aiml-tracker" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">AvinishPandey107/aiml-tracker</a>
+    </div>
   </div>
 </div>
 
-<!-- 2. LOGGED-IN CONTROLS BAR (Floats top-right only after login) -->
+<!-- 2. GUEST CONTROLS (Floats top-right when logged out) -->
+<div id="guest-controls" style="position: fixed; top: 12px; right: 14px; z-index: 999999; background: rgba(17, 22, 34, 0.88); border: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 10px; padding: 6px 12px; display: flex; align-items: center; gap: 8px; font-family: monospace; font-size: 12px; color: #f1f5f9; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+  <span style="color: #6ee7b7; font-weight: 600;">● Guest Mode</span>
+  <button onclick="openAuthGate()" style="padding: 5px 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">☁️ Cloud Sync / Sign In</button>
+</div>
+
+<!-- 3. LOGGED-IN CONTROLS BAR (Floats top-right only after login) -->
 <div id="user-controls" style="display: none; position: fixed; top: 12px; right: 14px; z-index: 999999; background: rgba(17, 22, 34, 0.88); border: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 10px; padding: 6px 12px; align-items: center; gap: 8px; font-family: monospace; font-size: 12px; color: #f1f5f9; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
   <span id="user-display" style="color: #38bdf8; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
   <button onclick="openProfileModal()" style="padding: 5px 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">👤 Profile</button>
@@ -5566,22 +5621,47 @@ init();
   let activeUser = null;
   let currentGateMode = 'signin';
 
+  function openAuthGate() {
+    const authGate = document.getElementById("auth-gate");
+    if (authGate) authGate.style.display = "flex";
+  }
+
+  function dismissAuthGate() {
+    const authGate = document.getElementById("auth-gate");
+    if (authGate) authGate.style.display = "none";
+    sessionStorage.setItem('aiml_gate_dismissed', 'true');
+    const guestControls = document.getElementById("guest-controls");
+    if (guestControls && !activeUser) guestControls.style.display = "flex";
+    if (typeof showToast === 'function') {
+      showToast("👋 Exploring in Guest Mode! Progress is saved locally.");
+    }
+  }
+
   // Listen for login/logout state changes
   supabaseClient.auth.onAuthStateChange(async (event, session) => {
     activeUser = session?.user ?? null;
     const authGate = document.getElementById("auth-gate");
     const userControls = document.getElementById("user-controls");
+    const guestControls = document.getElementById("guest-controls");
 
     if (activeUser) {
-      authGate.style.display = "none";
-      userControls.style.display = "flex";
+      if (authGate) authGate.style.display = "none";
+      if (userControls) userControls.style.display = "flex";
+      if (guestControls) guestControls.style.display = "none";
       const displayName = (state.profile && state.profile.name) ? state.profile.name : activeUser.email;
       document.getElementById("user-display").innerText = displayName;
       await loadMyData();
       renderLeaderboard();
     } else {
-      authGate.style.display = "flex";
-      userControls.style.display = "none";
+      if (userControls) userControls.style.display = "none";
+      if (guestControls) guestControls.style.display = "flex";
+      if (authGate) {
+        if (sessionStorage.getItem('aiml_gate_dismissed') === 'true') {
+          authGate.style.display = "none";
+        } else {
+          authGate.style.display = "flex";
+        }
+      }
       renderLeaderboard();
     }
   });
@@ -5613,19 +5693,19 @@ init();
       if (passGroup) passGroup.style.display = "block";
       if (socialSection) socialSection.style.display = "block";
       if (actionBtn) {
-        actionBtn.innerText = "Log In";
+        actionBtn.innerText = "Log In to Sync Progress";
         actionBtn.style.background = "#38bdf8";
         actionBtn.onclick = handleLogin;
       }
       if (switchHint) {
-        switchHint.innerHTML = `New to AI/ML Tracker? <a href="javascript:void(0)" onclick="setGateMode('signup')" style="color: #6ee7b7; font-weight: 600; text-decoration: none;">Create an account here</a>`;
+        switchHint.innerHTML = `New to AI/ML Tracker? <a href="javascript:void(0)" onclick="setGateMode('signup')" style="color: #6ee7b7; font-weight: 600; text-decoration: none;">Create a tracker sync account</a>`;
       }
     } else if (mode === 'signup') {
       if (tabSignUp) { tabSignUp.style.background = "#6ee7b7"; tabSignUp.style.color = "#07090e"; }
       if (passGroup) passGroup.style.display = "block";
       if (socialSection) socialSection.style.display = "block";
       if (actionBtn) {
-        actionBtn.innerText = "Sign Up & Start Journey";
+        actionBtn.innerText = "Create Tracker Sync Account";
         actionBtn.style.background = "#6ee7b7";
         actionBtn.onclick = handleSignup;
       }
