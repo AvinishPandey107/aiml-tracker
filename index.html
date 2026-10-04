@@ -5401,14 +5401,70 @@ init();
           <input type="text" id="prof-name" placeholder="e.g. Alex Turing" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
         </div>
         <div>
-          <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">Country</label>
-          <input type="text" id="prof-country" placeholder="e.g. India, USA, Germany..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+          <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">Country / Region</label>
+          <input type="text" id="prof-country" list="country-suggestions" placeholder="e.g. India, USA, Germany..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+          <datalist id="country-suggestions">
+            <option value="India">
+            <option value="United States">
+            <option value="United Kingdom">
+            <option value="Canada">
+            <option value="Germany">
+            <option value="France">
+            <option value="Australia">
+            <option value="Japan">
+            <option value="Singapore">
+            <option value="Switzerland">
+            <option value="Netherlands">
+            <option value="South Korea">
+            <option value="Brazil">
+            <option value="United Arab Emirates">
+            <option value="Karnataka, India">
+            <option value="Maharashtra, India">
+            <option value="Delhi NCR, India">
+            <option value="Bengaluru, India">
+            <option value="Mumbai, India">
+            <option value="Hyderabad, India">
+            <option value="Pune, India">
+            <option value="California, USA">
+          </datalist>
         </div>
       </div>
 
       <div>
         <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">College / University / Organization</label>
-        <input type="text" id="prof-college" placeholder="e.g. IIT Bombay, Stanford, BITS Pilani, MIT..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+        <input type="text" id="prof-college" list="college-suggestions" placeholder="e.g. Bangalore Institute of Technology, IIT Bombay, Stanford..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+        <datalist id="college-suggestions">
+          <option value="Bangalore Institute of Technology (BIT)">
+          <option value="RV College of Engineering (RVCE)">
+          <option value="BMS College of Engineering (BMSCE)">
+          <option value="PES University">
+          <option value="MS Ramaiah Institute of Technology (MSRIT)">
+          <option value="Dayananda Sagar College of Engineering (DSCE)">
+          <option value="New Horizon College of Engineering">
+          <option value="IIT Bombay">
+          <option value="IIT Delhi">
+          <option value="IIT Madras">
+          <option value="IIT Kanpur">
+          <option value="IIT Kharagpur">
+          <option value="IIT Roorkee">
+          <option value="IIT Guwahati">
+          <option value="BITS Pilani">
+          <option value="IIIT Hyderabad">
+          <option value="IIIT Bangalore">
+          <option value="NIT Trichy">
+          <option value="NIT Surathkal">
+          <option value="NIT Warangal">
+          <option value="Stanford University">
+          <option value="MIT (Massachusetts Institute of Technology)">
+          <option value="Carnegie Mellon University (CMU)">
+          <option value="UC Berkeley">
+          <option value="Harvard University">
+          <option value="Oxford University">
+          <option value="Cambridge University">
+          <option value="ETH Zurich">
+          <option value="National University of Singapore (NUS)">
+          <option value="Self-Taught / Independent Learner">
+        </datalist>
       </div>
 
       <div>
@@ -5659,14 +5715,30 @@ init();
       const displayName = (state.profile && state.profile.name) ? state.profile.name : activeUser.email;
       document.getElementById("user-display").innerText = displayName;
       await loadMyData();
-      renderLeaderboard();
+      renderLeaderboard(true);
     } else {
       if (userControls) userControls.style.display = "none";
       if (guestControls) guestControls.style.display = "flex";
       if (authGate) {
         authGate.style.display = "none";
       }
-      renderLeaderboard();
+      renderLeaderboard(true);
+    }
+  });
+
+  // Restore session on initial page load immediately
+  supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
+    if (session?.user && !activeUser) {
+      activeUser = session.user;
+      const userControls = document.getElementById("user-controls");
+      const guestControls = document.getElementById("guest-controls");
+      if (userControls) userControls.style.display = "flex";
+      if (guestControls) guestControls.style.display = "none";
+      const displayName = (state.profile && state.profile.name) ? state.profile.name : activeUser.email;
+      const userDisplayEl = document.getElementById("user-display");
+      if (userDisplayEl) userDisplayEl.innerText = displayName;
+      await loadMyData();
+      renderLeaderboard(true);
     }
   });
 
@@ -5890,15 +5962,37 @@ init();
     }
 
     const currentData = { ...state };
+    const nameVal = state.profile?.name || activeUser.email.split('@')[0];
+    const collegeVal = state.profile?.college || '';
+    const countryVal = state.profile?.country || '';
+    const bioVal = state.profile?.bio || '';
+    const xpVal = state.xp || 0;
 
-    const { error } = await supabaseClient
+    let { error } = await supabaseClient
       .from('profiles')
       .upsert({
         id: activeUser.id,
         email: activeUser.email,
+        handle: nameVal,
+        college: collegeVal,
+        country: countryVal,
+        bio: bioVal,
+        xp: xpVal,
         user_data: currentData,
         updated_at: new Date().toISOString()
       }, { onConflict: 'id' });
+
+    if (error) {
+      const fallback = await supabaseClient
+        .from('profiles')
+        .upsert({
+          id: activeUser.id,
+          email: activeUser.email,
+          user_data: currentData,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+      error = fallback.error;
+    }
 
     if (error) {
       if (!silent) showToast("❌ Cloud save failed: " + error.message);
@@ -5915,7 +6009,7 @@ init();
     try {
       const { data, error } = await supabaseClient
         .from('profiles')
-        .select('user_data')
+        .select('*')
         .eq('id', activeUser.id)
         .maybeSingle();
 
@@ -5924,16 +6018,44 @@ init();
         return;
       }
 
-      if (data?.user_data && Object.keys(data.user_data).length > 0) {
-        state = Object.assign(state, data.user_data);
+      if (data) {
+        if (data.user_data && Object.keys(data.user_data).length > 0) {
+          state = Object.assign(state, data.user_data);
+        }
         if (!state.profile) state.profile = { name: '', college: '', country: '', bio: '' };
+
+        // Hydrate from DB columns ensuring values never reset across browsers
+        if (data.handle || data.name) state.profile.name = data.handle || data.name;
+        if (data.college) state.profile.college = data.college;
+        if (data.country) state.profile.country = data.country;
+        if (data.bio) state.profile.bio = data.bio;
+        if (typeof data.xp === 'number' && data.xp > (state.xp || 0)) {
+          state.xp = data.xp;
+        }
+
+        // Hydrate input fields if accessible
+        const nameInput = document.getElementById("prof-name");
+        const countryInput = document.getElementById("prof-country");
+        const collegeInput = document.getElementById("prof-college");
+        const bioInput = document.getElementById("prof-bio");
+        if (nameInput && state.profile.name) nameInput.value = state.profile.name;
+        if (countryInput && state.profile.country) countryInput.value = state.profile.country;
+        if (collegeInput && state.profile.college) collegeInput.value = state.profile.college;
+        if (bioInput && state.profile.bio) bioInput.value = state.profile.bio;
+
         localStorage.setItem('aiml_state', JSON.stringify(state));
-        buildCurriculum();
-        buildCalendar();
-        renderLogs();
-        renderNotes();
-        updateStats();
-        renderLeaderboard();
+
+        if (typeof buildCurriculum === 'function') buildCurriculum();
+        if (typeof buildCalendar === 'function') buildCalendar();
+        if (typeof renderLogs === 'function') renderLogs();
+        if (typeof renderNotes === 'function') renderNotes();
+        if (typeof updateStats === 'function') updateStats();
+        if (typeof renderLeaderboard === 'function') renderLeaderboard(false);
+
+        const displayName = state.profile.name || activeUser.email;
+        const userDisplayEl = document.getElementById("user-display");
+        if (userDisplayEl) userDisplayEl.innerText = displayName;
+
         showToast("☁️ Cloud progress restored!");
       } else {
         await saveMyData(true);
@@ -5969,19 +6091,58 @@ init();
     if (modal) modal.style.display = "none";
   }
 
-  function saveProfileDetails() {
+  async function saveProfileDetails() {
     if (!state.profile) state.profile = {};
-    state.profile.name = document.getElementById("prof-name").value.trim();
-    state.profile.country = document.getElementById("prof-country").value.trim();
-    state.profile.college = document.getElementById("prof-college").value.trim();
-    state.profile.bio = document.getElementById("prof-bio").value.trim();
+    const nameVal = document.getElementById("prof-name").value.trim();
+    const countryVal = document.getElementById("prof-country").value.trim();
+    const collegeVal = document.getElementById("prof-college").value.trim();
+    const bioVal = document.getElementById("prof-bio").value.trim();
+
+    state.profile.name = nameVal;
+    state.profile.country = countryVal;
+    state.profile.college = collegeVal;
+    state.profile.bio = bioVal;
 
     if (activeUser && document.getElementById("user-display")) {
       document.getElementById("user-display").innerText = state.profile.name || activeUser.email;
     }
 
     save();
-    renderLeaderboard();
+
+    if (activeUser) {
+      try {
+        const payload = {
+          id: activeUser.id,
+          email: activeUser.email,
+          handle: nameVal,
+          college: collegeVal,
+          country: countryVal,
+          bio: bioVal,
+          xp: state.xp || 0,
+          user_data: { ...state },
+          updated_at: new Date().toISOString()
+        };
+
+        let { error } = await supabaseClient
+          .from('profiles')
+          .upsert(payload, { onConflict: 'id' });
+
+        if (error) {
+          await supabaseClient
+            .from('profiles')
+            .upsert({
+              id: activeUser.id,
+              email: activeUser.email,
+              user_data: { ...state },
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'id' });
+        }
+      } catch (err) {
+        console.error("Error saving profile to Supabase:", err);
+      }
+    }
+
+    renderLeaderboard(true);
     showToast("👤 Profile details saved & synced!");
     closeProfileModal();
   }
@@ -6026,24 +6187,8 @@ init();
   // ===================== LEADERBOARD / RANKINGS SYSTEM =====================
   let currentRankScope = 'global';
   let rankSearchFilter = '';
-
-  const BENCHMARK_LEARNERS = [
-    { id: 'b1', name: 'Sophia Chen', college: 'Stanford University', country: 'United States', xp: 4620, streak: 84, avatar: '👩‍💻' },
-    { id: 'b2', name: 'Arjun Mehta', college: 'IIT Bombay', country: 'India', xp: 4210, streak: 72, avatar: '👨‍💻' },
-    { id: 'b3', name: 'Lucas Dubois', college: 'ETH Zurich', country: 'Switzerland', xp: 3890, streak: 65, avatar: '🧑‍💻' },
-    { id: 'b4', name: 'Priya Sharma', college: 'IIT Delhi', country: 'India', xp: 3540, streak: 58, avatar: '👩‍💻' },
-    { id: 'b5', name: 'Liam Wilson', college: 'MIT', country: 'United States', xp: 3310, streak: 51, avatar: '👨‍💻' },
-    { id: 'b6', name: 'Yuki Tanaka', college: 'University of Tokyo', country: 'Japan', xp: 3100, streak: 46, avatar: '🧑‍💻' },
-    { id: 'b7', name: 'Aarav Patel', college: 'BITS Pilani', country: 'India', xp: 2850, streak: 40, avatar: '👨‍💻' },
-    { id: 'b8', name: 'Elena Rostova', college: 'TU Munich', country: 'Germany', xp: 2600, streak: 38, avatar: '👩‍💻' },
-    { id: 'b9', name: 'David Kim', college: 'KAIST', country: 'South Korea', xp: 2420, streak: 35, avatar: '👨‍💻' },
-    { id: 'b10', name: 'Rohan Gupta', college: 'IIT Madras', country: 'India', xp: 2190, streak: 31, avatar: '🧑‍💻' },
-    { id: 'b11', name: 'Chloe Martin', college: 'Oxford University', country: 'United Kingdom', xp: 1980, streak: 27, avatar: '👩‍💻' },
-    { id: 'b12', name: 'Zack Zhang', college: 'Tsinghua University', country: 'China', xp: 1750, streak: 24, avatar: '👨‍💻' },
-    { id: 'b13', name: 'Ananya Verma', college: 'IIT Kharagpur', country: 'India', xp: 1520, streak: 21, avatar: '👩‍💻' },
-    { id: 'b14', name: 'Mateo Rossi', college: 'Politecnico di Milano', country: 'Italy', xp: 1310, streak: 18, avatar: '👨‍💻' },
-    { id: 'b15', name: 'Marcus Vance', college: 'UC Berkeley', country: 'United States', xp: 1100, streak: 15, avatar: '🧑‍💻' },
-  ];
+  let cachedLeaderboardData = null;
+  let isFetchingLeaderboard = false;
 
   function switchRankTab(scope, btn) {
     currentRankScope = scope;
@@ -6051,18 +6196,45 @@ init();
       if (b.id && b.id.startsWith('rank-scope-')) b.classList.remove('active');
     });
     if (btn) btn.classList.add('active');
-    renderLeaderboard();
+    renderLeaderboard(false);
   }
 
   function handleRankSearch(val) {
     rankSearchFilter = (val || '').toLowerCase().trim();
-    renderLeaderboard();
+    renderLeaderboard(false);
   }
 
-  function renderLeaderboard() {
+  async function renderLeaderboard(fetchFromRemote = true) {
     const listEl = document.getElementById("leaderboard-list");
     const bannerEl = document.getElementById("my-standing-banner");
     if (!listEl) return;
+
+    if (fetchFromRemote && !isFetchingLeaderboard) {
+      isFetchingLeaderboard = true;
+      try {
+        let { data, error } = await supabaseClient
+          .from('profiles')
+          .select('id, handle, college, country, xp, user_data')
+          .order('xp', { ascending: false })
+          .limit(25);
+
+        if (error) {
+          const fallbackRes = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .limit(25);
+          data = fallbackRes.data;
+        }
+
+        if (data && Array.isArray(data)) {
+          cachedLeaderboardData = data;
+        }
+      } catch (e) {
+        console.warn("Could not fetch remote leaderboard, using cached data:", e);
+      } finally {
+        isFetchingLeaderboard = false;
+      }
+    }
 
     const myProfile = state.profile || {};
     const myName = myProfile.name || (activeUser ? activeUser.email.split('@')[0] : 'You (Learner)');
@@ -6071,24 +6243,61 @@ init();
     const myXp = state.xp || 0;
     const myStreak = state.streak || 0;
 
-    const meItem = {
-      id: 'current_user',
-      isMe: true,
-      name: myName,
-      college: myCollege,
-      country: myCountry,
-      xp: myXp,
-      streak: myStreak,
-      avatar: '⭐'
-    };
+    // Process only real database profiles (no mock / fake users)
+    const rawList = cachedLeaderboardData || [];
+    let realLearners = [];
 
-    let allItems = [meItem, ...BENCHMARK_LEARNERS];
+    rawList.forEach(row => {
+      const isMe = activeUser && row.id === activeUser.id;
+      const name = row.handle || row.name || row.user_data?.profile?.name || (row.email ? row.email.split('@')[0] : 'Learner');
+      const college = row.college || row.user_data?.profile?.college || 'Self-Taught / Open Academy';
+      const country = row.country || row.user_data?.profile?.country || 'Earth 🌍';
+      const xp = typeof row.xp === 'number' ? row.xp : (row.user_data?.xp || 0);
+      const streak = typeof row.streak === 'number' ? row.streak : (row.user_data?.streak || 0);
+
+      realLearners.push({
+        id: row.id || name,
+        isMe: isMe,
+        name: name,
+        college: college,
+        country: country,
+        xp: xp,
+        streak: streak,
+        avatar: isMe ? '⭐' : '🚀'
+      });
+    });
+
+    // Make sure the current learner is always included in their local view
+    const meIndex = realLearners.findIndex(l => l.isMe || (activeUser && l.id === activeUser.id));
+    if (meIndex >= 0) {
+      realLearners[meIndex].name = myName;
+      realLearners[meIndex].college = myCollege;
+      realLearners[meIndex].country = myCountry;
+      realLearners[meIndex].xp = Math.max(realLearners[meIndex].xp, myXp);
+      realLearners[meIndex].streak = Math.max(realLearners[meIndex].streak, myStreak);
+      realLearners[meIndex].isMe = true;
+      realLearners[meIndex].avatar = '⭐';
+    } else {
+      realLearners.push({
+        id: activeUser ? activeUser.id : 'current_user',
+        isMe: true,
+        name: myName,
+        college: myCollege,
+        country: myCountry,
+        xp: myXp,
+        streak: myStreak,
+        avatar: '⭐'
+      });
+    }
+
+    let allItems = realLearners;
 
     // GLOBAL RANKING
     if (currentRankScope === 'global') {
       allItems.sort((a, b) => b.xp - a.xp);
       const myRank = allItems.findIndex(x => x.isMe) + 1;
       const totalCount = allItems.length;
+      const otherCount = allItems.filter(x => !x.isMe).length;
       const topNext = myRank > 1 ? allItems[myRank - 2] : null;
       const xpDiff = topNext ? (topNext.xp - myXp + 10) : 0;
 
@@ -6096,9 +6305,9 @@ init();
         bannerEl.innerHTML = `
           <div style="font-size: 28px;">🏆</div>
           <div class="my-standing-details">
-            <div class="my-standing-title">Your Global Position: Rank #${myRank} of ${totalCount} Learners</div>
+            <div class="my-standing-title">Your Global Position: Rank #${myRank} of ${totalCount} Active Learner${totalCount > 1 ? 's' : ''}</div>
             <div class="my-standing-sub">
-              ${topNext ? `Earn <strong>${xpDiff} more XP</strong> to surpass <em>${topNext.name}</em>!` : '🌟 Incredible! You are leading the global leaderboard!'}
+              ${topNext ? `Earn <strong>${xpDiff} more XP</strong> to surpass <em>${topNext.name}</em>!` : (otherCount === 0 ? 'You are the trailblazer leading this leaderboard! Complete curriculum topics to bank more XP.' : '🌟 Incredible! You are leading the global leaderboard!')}
             </div>
           </div>
           <div class="my-standing-metric">
@@ -6117,7 +6326,7 @@ init();
         );
       }
 
-      listEl.innerHTML = filtered.map((item, idx) => {
+      let html = filtered.map((item, idx) => {
         const trueRank = allItems.indexOf(item) + 1;
         const rankBadge = trueRank === 1 ? '🥇' : (trueRank === 2 ? '🥈' : (trueRank === 3 ? '🥉' : `#${trueRank}`));
         return `
@@ -6134,11 +6343,21 @@ init();
         `;
       }).join('');
 
+      if (otherCount === 0) {
+        html += `
+          <div style="text-align: center; padding: 24px 16px; color: var(--muted); font-size: 13px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 12px; margin-top: 14px;">
+            🌱 No other learners on the leaderboard yet. As more learners create profiles and sync progress, their real rankings will appear here live!
+          </div>
+        `;
+      }
+
+      listEl.innerHTML = html;
+
     // COLLEGE RANKING
     } else if (currentRankScope === 'college') {
       const collegeMap = {};
       allItems.forEach(item => {
-        const col = item.college.trim() || 'Unknown College';
+        const col = item.college.trim() || 'Self-Taught / Open Academy';
         if (!collegeMap[col]) {
           collegeMap[col] = { college: col, totalXp: 0, learners: [], topStreak: 0, hasMe: false };
         }
@@ -6171,7 +6390,7 @@ init();
         collegeList = collegeList.filter(c => c.college.toLowerCase().includes(rankSearchFilter));
       }
 
-      listEl.innerHTML = collegeList.map((col, idx) => {
+      let html = collegeList.map((col, idx) => {
         const rankBadge = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx + 1}`));
         return `
           <div class="rank-row ${col.hasMe ? 'is-me' : ''}">
@@ -6186,6 +6405,16 @@ init();
           </div>
         `;
       }).join('');
+
+      if (collegeList.length <= 1) {
+        html += `
+          <div style="text-align: center; padding: 24px 16px; color: var(--muted); font-size: 13px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 12px; margin-top: 14px;">
+            🎓 Tell your college peers to join and set their institution to climb the campus leaderboard!
+          </div>
+        `;
+      }
+
+      listEl.innerHTML = html;
 
     // COUNTRY RANKING
     } else if (currentRankScope === 'country') {
@@ -6224,7 +6453,7 @@ init();
         countryList = countryList.filter(c => c.country.toLowerCase().includes(rankSearchFilter));
       }
 
-      listEl.innerHTML = countryList.map((ctry, idx) => {
+      let html = countryList.map((ctry, idx) => {
         const rankBadge = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx + 1}`));
         return `
           <div class="rank-row ${ctry.hasMe ? 'is-me' : ''}">
@@ -6239,6 +6468,16 @@ init();
           </div>
         `;
       }).join('');
+
+      if (countryList.length <= 1) {
+        html += `
+          <div style="text-align: center; padding: 24px 16px; color: var(--muted); font-size: 13px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 12px; margin-top: 14px;">
+            🌐 Real learner country rankings will populate as international engineers join!
+          </div>
+        `;
+      }
+
+      listEl.innerHTML = html;
     }
   }
 
