@@ -5874,13 +5874,23 @@ init();
         <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">College / University / Organization</label>
         <input type="text" id="prof-college" list="college-suggestions" placeholder="e.g. Bangalore Institute of Technology, IIT Bombay, Stanford..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
         <datalist id="college-suggestions">
-          <option value="Bangalore Institute of Technology (BIT)">
-          <option value="RV College of Engineering (RVCE)">
-          <option value="BMS College of Engineering (BMSCE)">
-          <option value="PES University">
-          <option value="MS Ramaiah Institute of Technology (MSRIT)">
-          <option value="Dayananda Sagar College of Engineering (DSCE)">
-          <option value="New Horizon College of Engineering">
+          <option value="Indian Institute of Information Technology, Allahabad (IIIT Allahabad)">
+          <option value="IIIT Hyderabad">
+          <option value="IIIT Bangalore">
+          <option value="IIIT Delhi">
+          <option value="IIIT Lucknow">
+          <option value="IIIT Gwalior">
+          <option value="IIIT Jabalpur">
+          <option value="IIIT Pune">
+          <option value="IIIT Vadodara">
+          <option value="IIIT Sri City">
+          <option value="IIIT Kota">
+          <option value="IIIT Surat">
+          <option value="IIIT Bhopal">
+          <option value="IIIT Dharwad">
+          <option value="IIIT Kalyani">
+          <option value="IIIT Una">
+          <option value="IIIT Bhagalpur">
           <option value="IIT Bombay">
           <option value="IIT Delhi">
           <option value="IIT Madras">
@@ -5888,12 +5898,36 @@ init();
           <option value="IIT Kharagpur">
           <option value="IIT Roorkee">
           <option value="IIT Guwahati">
-          <option value="BITS Pilani">
-          <option value="IIIT Hyderabad">
-          <option value="IIIT Bangalore">
+          <option value="IIT BHU Varanasi">
+          <option value="IIT Hyderabad">
+          <option value="IIT Indore">
+          <option value="IIT Patna">
+          <option value="IIT Gandhinagar">
+          <option value="IIT Ropar">
           <option value="NIT Trichy">
-          <option value="NIT Surathkal">
+          <option value="NIT Surathkal (Karnataka)">
+          <option value="NIT Rourkela">
           <option value="NIT Warangal">
+          <option value="NIT Calicut">
+          <option value="VNIT Nagpur">
+          <option value="MNIT Jaipur">
+          <option value="MNNIT Allahabad">
+          <option value="MANIT Bhopal">
+          <option value="SVNIT Surat">
+          <option value="NIT Durgapur">
+          <option value="NIT Silchar">
+          <option value="Bangalore Institute of Technology (BIT)">
+          <option value="RV College of Engineering (RVCE)">
+          <option value="PES University">
+          <option value="BMS College of Engineering (BMSCE)">
+          <option value="MSRIT Bangalore">
+          <option value="Dayananda Sagar College of Engineering (DSCE)">
+          <option value="New Horizon College of Engineering">
+          <option value="BITS Pilani">
+          <option value="VIT Vellore">
+          <option value="SRM Institute">
+          <option value="DTU Delhi">
+          <option value="NSUT Delhi">
           <option value="Stanford University">
           <option value="MIT (Massachusetts Institute of Technology)">
           <option value="Carnegie Mellon University (CMU)">
@@ -6660,6 +6694,197 @@ init();
     }
   }
 
+  // ===================== DYNAMIC GLOBAL COLLEGE & UNIVERSITY SEARCH =====================
+  const PRECOMPILED_COLLEGES = [
+    // All IIITs
+    "Indian Institute of Information Technology, Allahabad (IIIT Allahabad)",
+    "IIIT Hyderabad",
+    "IIIT Bangalore",
+    "IIIT Delhi",
+    "IIIT Lucknow",
+    "IIIT Gwalior",
+    "IIIT Jabalpur",
+    "IIIT Pune",
+    "IIIT Vadodara",
+    "IIIT Sri City",
+    "IIIT Kota",
+    "IIIT Surat",
+    "IIIT Bhopal",
+    "IIIT Dharwad",
+    "IIIT Kalyani",
+    "IIIT Una",
+    "IIIT Bhagalpur",
+
+    // All IITs
+    "IIT Bombay",
+    "IIT Delhi",
+    "IIT Madras",
+    "IIT Kanpur",
+    "IIT Kharagpur",
+    "IIT Roorkee",
+    "IIT Guwahati",
+    "IIT BHU Varanasi",
+    "IIT Hyderabad",
+    "IIT Indore",
+    "IIT Patna",
+    "IIT Gandhinagar",
+    "IIT Ropar",
+
+    // All NITs
+    "NIT Trichy",
+    "NIT Surathkal (Karnataka)",
+    "NIT Rourkela",
+    "NIT Warangal",
+    "NIT Calicut",
+    "VNIT Nagpur",
+    "MNIT Jaipur",
+    "MNNIT Allahabad",
+    "MANIT Bhopal",
+    "SVNIT Surat",
+    "NIT Durgapur",
+    "NIT Silchar",
+
+    // Top Regional & Private
+    "Bangalore Institute of Technology (BIT)",
+    "RV College of Engineering (RVCE)",
+    "PES University",
+    "BMS College of Engineering (BMSCE)",
+    "MSRIT Bangalore",
+    "Dayananda Sagar College of Engineering (DSCE)",
+    "New Horizon College of Engineering",
+    "BITS Pilani",
+    "VIT Vellore",
+    "SRM Institute",
+    "DTU Delhi",
+    "NSUT Delhi",
+
+    // Global & Other Popular
+    "Stanford University",
+    "MIT (Massachusetts Institute of Technology)",
+    "Carnegie Mellon University (CMU)",
+    "UC Berkeley",
+    "Harvard University",
+    "Oxford University",
+    "Cambridge University",
+    "ETH Zurich",
+    "National University of Singapore (NUS)",
+    "Self-Taught / Independent Learner"
+  ];
+
+  let collegeSearchTimer = null;
+  let collegeAbortController = null;
+
+  function filterLocalColleges(query) {
+    if (!query) return PRECOMPILED_COLLEGES;
+    const qLower = query.toLowerCase().trim();
+    return PRECOMPILED_COLLEGES.filter(inst => {
+      const instLower = inst.toLowerCase();
+      if (instLower.includes(qLower)) return true;
+      if (qLower === 'iiit' && instLower.includes('information technology')) return true;
+      if (qLower === 'iit' && instLower.includes('technology')) return true;
+      if (qLower === 'nit' && instLower.includes('national institute of technology')) return true;
+      if (qLower === 'bit' && (instLower.includes('bangalore institute') || instLower.includes('pilani'))) return true;
+      if (qLower === 'rvce' && instLower.includes('rv college')) return true;
+      if (qLower === 'bmsce' && instLower.includes('bms college')) return true;
+      if (qLower === 'msrit' && instLower.includes('ramaiah')) return true;
+      if (qLower === 'dtu' && instLower.includes('delhi technological')) return true;
+      if (qLower === 'nsut' && instLower.includes('netaji subhas')) return true;
+      if (qLower === 'vit' && instLower.includes('vellore')) return true;
+      if (qLower === 'mit' && instLower.includes('massachusetts')) return true;
+      if (qLower === 'cmu' && instLower.includes('carnegie mellon')) return true;
+      if (qLower === 'nus' && instLower.includes('singapore')) return true;
+      return false;
+    });
+  }
+
+  function updateCollegeDatalist(optionsList) {
+    const datalist = document.getElementById("college-suggestions");
+    if (!datalist) return;
+    datalist.innerHTML = optionsList.map(name => `<option value="${name.replace(/"/g, '&quot;')}">`).join('');
+  }
+
+  function handleCollegeInputChange(val) {
+    const query = (val || '').trim();
+
+    // If query < 2 characters, restore default precompiled list and cancel pending fetches
+    if (query.length < 2) {
+      if (collegeAbortController) {
+        collegeAbortController.abort();
+        collegeAbortController = null;
+      }
+      clearTimeout(collegeSearchTimer);
+      updateCollegeDatalist(PRECOMPILED_COLLEGES);
+      return;
+    }
+
+    // 1. Instant local fallback matching (zero latency)
+    const localMatches = filterLocalColleges(query);
+    updateCollegeDatalist(localMatches);
+
+    // 2. Debounced global university registry API query (300ms)
+    clearTimeout(collegeSearchTimer);
+    collegeSearchTimer = setTimeout(async () => {
+      if (collegeAbortController) {
+        collegeAbortController.abort();
+      }
+      collegeAbortController = new AbortController();
+      const signal = collegeAbortController.signal;
+      const timeoutId = setTimeout(() => {
+        if (collegeAbortController) collegeAbortController.abort();
+      }, 4000);
+
+      try {
+        const apiUrl = `https://universities.hipolabs.com/search?name=${encodeURIComponent(query)}`;
+        const res = await fetch(apiUrl, { signal });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        if (Array.isArray(data)) {
+          const remoteNames = data.slice(0, 30).map(u => u.name).filter(Boolean);
+
+          // Combine both result arrays with local matches prioritized
+          const currentLocal = filterLocalColleges(query);
+          const combined = [...currentLocal];
+          const seen = new Set(currentLocal.map(c => c.toLowerCase()));
+
+          remoteNames.forEach(rName => {
+            if (!seen.has(rName.toLowerCase())) {
+              combined.push(rName);
+              seen.add(rName.toLowerCase());
+            }
+          });
+
+          updateCollegeDatalist(combined);
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          // Local matches already active & populated
+          console.warn("Global university API unreachable or timed out; using instant local institutions:", err);
+        }
+      }
+    }, 300);
+  }
+
+  function setupCollegeAutocomplete() {
+    const collegeInputs = [
+      document.getElementById("prof-college"),
+      document.getElementById("profile-college")
+    ].filter(Boolean);
+
+    collegeInputs.forEach(input => {
+      if (input._hasCollegeAutocomplete) return;
+      input._hasCollegeAutocomplete = true;
+      input.addEventListener('input', (e) => handleCollegeInputChange(e.target.value));
+      input.addEventListener('focus', () => {
+        if (!input.value.trim()) {
+          updateCollegeDatalist(PRECOMPILED_COLLEGES);
+        }
+      });
+    });
+  }
+
   // ===================== PROFILE MANAGEMENT =====================
   function openProfileModal() {
     if (!state.profile) state.profile = { name: '', college: '', country: '', bio: '', leetcode_handle: '', custom_avatar_url: '', allow_public_messages: true };
@@ -6690,6 +6915,14 @@ init();
     const badgeCountEl = document.getElementById("prof-badge-count");
     if (badgeCountEl) badgeCountEl.textContent = `${prog.unlockedCount} / ${prog.totalBadges} Unlocked`;
     renderBadgeShowcase('prof-badge-grid', state.xp || 0);
+
+    // Initialize college autocomplete and datalist suggestions
+    setupCollegeAutocomplete();
+    if (state.profile.college) {
+      handleCollegeInputChange(state.profile.college);
+    } else {
+      updateCollegeDatalist(PRECOMPILED_COLLEGES);
+    }
 
     const modal = document.getElementById("profile-modal");
     if (modal) modal.style.display = "flex";
@@ -8155,10 +8388,11 @@ where $\\lambda \\Omega(\\theta)$ imposes regularizing structural constraints (s
     }, 400);
   }
 
-  // Initialize Leaderboard on load
+  // Initialize on load
   window.addEventListener('DOMContentLoaded', () => {
     updateAiBadge();
     renderLeaderboard();
+    setupCollegeAutocomplete();
   });
 </script>
 </body>
