@@ -5487,7 +5487,7 @@ init();
 </div>
 
 <!-- 1. AUTH GATE (OPTIONAL PROGRESS SYNC MODAL) -->
-<div id="auth-gate" style="position: fixed; inset: 0; z-index: 99999999; background: rgba(7, 9, 14, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif;">
+<div id="auth-gate" style="position: fixed; inset: 0; z-index: 99999999; background: rgba(7, 9, 14, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); display: none; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif;">
   <div style="background: #111622; border: 1px solid rgba(255, 255, 255, 0.14); padding: 30px 28px; border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); text-align: center; color: #fff; position: relative; max-height: 94vh; overflow-y: auto;">
     
     <!-- TOP BAR WITH CLOSE BUTTON -->
@@ -5618,6 +5618,12 @@ init();
   const SUPABASE_KEY = "sb_publishable__S_yb1TUbxaxKh9koe_Fcg_iq0UOhZo";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Clean URL hash containing OAuth/magic-link tokens to prevent false positives from security scanners
+  if (window.location.hash && window.location.hash.includes('access_token')) {
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+
   let activeUser = null;
   let currentGateMode = 'signin';
 
@@ -5632,13 +5638,15 @@ init();
     sessionStorage.setItem('aiml_gate_dismissed', 'true');
     const guestControls = document.getElementById("guest-controls");
     if (guestControls && !activeUser) guestControls.style.display = "flex";
-    if (typeof showToast === 'function') {
-      showToast("👋 Exploring in Guest Mode! Progress is saved locally.");
-    }
   }
 
   // Listen for login/logout state changes
   supabaseClient.auth.onAuthStateChange(async (event, session) => {
+    // Immediately clean URL hash if an auth token fragment exists
+    if (window.location.hash && window.location.hash.includes('access_token')) {
+      window.history.replaceState(null, null, window.location.pathname);
+    }
+
     activeUser = session?.user ?? null;
     const authGate = document.getElementById("auth-gate");
     const userControls = document.getElementById("user-controls");
@@ -5656,11 +5664,7 @@ init();
       if (userControls) userControls.style.display = "none";
       if (guestControls) guestControls.style.display = "flex";
       if (authGate) {
-        if (sessionStorage.getItem('aiml_gate_dismissed') === 'true') {
-          authGate.style.display = "none";
-        } else {
-          authGate.style.display = "flex";
-        }
+        authGate.style.display = "none";
       }
       renderLeaderboard();
     }
