@@ -1,14 +1,19 @@
-# 🧠 AI/ML Mastery Tracker
+# 🧠 AI/ML Tracker - Interactive AI & Machine Learning Roadmap
 
-> An interactive, zero-dependency roadmap and habit tracker designed to take learners from math foundations to production ML, transformers, and global competitions.
+👉 **Live Application:** [avinishpandey107.github.io/aiml-tracker](https://avinishpandey107.github.io/aiml-tracker/)  
+🚀 **Launch App:** [AI/ML Tracker](https://avinishpandey107.github.io/aiml-tracker/)
+
+> A structured, interactive roadmap and habit tracker for machine learning engineers. Track progress, study daily, and master AI from math foundations to production systems.
 
 ---
 
 ## 📌 Overview
 
-**AI/ML Mastery Tracker** is a comprehensive, browser-based dashboard built for machine learning engineers and data scientists. It provides a curated, phase-by-phase curriculum, daily study logs, Pomodoro focus tools, habit tracking, and cloud sync via Supabase.
+**[AI/ML Tracker](https://avinishpandey107.github.io/aiml-tracker/)** is a comprehensive, browser-based dashboard built for machine learning engineers and data scientists. It provides a curated, phase-by-phase curriculum, daily study logs, Pomodoro focus tools, habit tracking, and cloud sync via Supabase.
 
-Everything runs from a single HTML file—featuring zero build steps, hardware-accelerated zero-G aesthetic UI, and real-time cloud data persistence.
+Try the live interactive website here: **[AI/ML Tracker Live](https://avinishpandey107.github.io/aiml-tracker/)**.
+
+Everything runs directly in your browser with zero build steps, hardware-accelerated zero-G aesthetic UI, and real-time cloud data persistence.
 
 ---
 
@@ -16,7 +21,9 @@ Everything runs from a single HTML file—featuring zero build steps, hardware-a
 
 - **8-Phase Structured Curriculum**: 50+ topics covering Linear Algebra, Calculus, Core ML, Deep Learning, Transformers, MLOps, System Design, and Research.
 - **Solo & Integration Capstones**: Hands-on projects tied directly to learned skills, from scratch implementations to cloud pipelines.
-- **Full-Screen Authentication Gate**: Secure Email/Password registration along with OAuth support (Google, GitHub, Discord).
+- **Global, College & Country Rankings**: Compete with engineers globally, track campus rankings, and level up your XP.
+- **Interactive AI Copilot**: Built-in 24/7 AI tutor and doubt solver with offline ML reasoning and Google Gemini API integration.
+- **Full-Screen Authentication Gate**: Secure Email/Password registration along with OAuth support (Google, GitHub, Discord) and forgot password recovery.
 - **Cloud State Synchronization**: Real-time progress syncing to Supabase PostgreSQL (`profiles` table) with debounced background saves.
 - **Gamified Progression**: Dynamic Leveling & XP tracking, achievement badges, and streak mechanics.
 - **Productivity Cockpit**:
@@ -28,3 +35,18 @@ Everything runs from a single HTML file—featuring zero build steps, hardware-a
 
 ---
 
+## 🚀 Quick Start
+
+Visit the live deployment at [avinishpandey107.github.io/aiml-tracker](https://avinishpandey107.github.io/aiml-tracker/) or clone the repository to run locally:
+
+```bash
+git clone https://github.com/AvinishPandey107/aiml-tracker.git
+cd aiml-tracker
+# Open index.html in any modern browser or with Live Server
+```
+
+---
+
+## 🌐 Live Web App
+
+Start tracking your machine learning mastery now: **[AI/ML Tracker](https://avinishpandey107.github.io/aiml-tracker/)**
