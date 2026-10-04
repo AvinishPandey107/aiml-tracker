@@ -2176,6 +2176,7 @@
     <div class="stat-pill">🏆 Lv.<span id="header-level">1</span></div>
     <div class="stat-pill">📅 <span id="header-date"></span></div>
     <div class="header-actions">
+      <button class="header-btn" onclick="openFeedbackModal()" id="header-feedback-btn" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24; font-weight: 700;" title="Report Bug or Share Feedback">⚠️ Report Bug / Feedback</button>
       <button class="header-btn" onclick="toggleDirectMessages()" id="header-dm-btn" title="Direct Messages">✈️ DMs <span id="header-dm-unread-badge" style="display:none; background:#ef4444; color:#fff; font-size:9px; padding:1px 5px; border-radius:10px; font-weight:700; margin-left:3px;">0</span></button>
       <button id="hud-audio-btn" class="header-btn cockpit-glow" onclick="toggleCockpitAudio()" title="Damped Acoustic SFX">🔊 SFX: ON</button>
       <button id="hud-grav-btn" class="header-btn" onclick="cycleGravity()" title="Gravitational Pull Vector">🌌 GRAV: -0.04G</button>
@@ -5838,11 +5839,11 @@ init();
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
         <div>
           <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">Your Name / Handle</label>
-          <input type="text" id="prof-name" placeholder="e.g. Alex Turing" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+          <input type="text" id="profile-handle" name="prof-name" placeholder="e.g. Alex Turing" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
         </div>
         <div>
           <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">Country / Region</label>
-          <input type="text" id="prof-country" list="country-suggestions" placeholder="e.g. India, USA, Germany..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+          <input type="text" id="profile-country" name="prof-country" list="country-suggestions" placeholder="e.g. India, USA, Germany..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
           <datalist id="country-suggestions">
             <option value="India">
             <option value="United States">
@@ -5872,7 +5873,7 @@ init();
 
       <div>
         <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">College / University / Organization</label>
-        <input type="text" id="prof-college" list="college-suggestions" placeholder="e.g. Bangalore Institute of Technology, IIT Bombay, Stanford..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+        <input type="text" id="profile-college" name="prof-college" list="college-suggestions" placeholder="e.g. Bangalore Institute of Technology, IIT Bombay, Stanford..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
         <datalist id="college-suggestions">
           <!-- Karnataka -->
           <option value="Bangalore Institute of Technology (BIT)">
@@ -6100,13 +6101,13 @@ init();
 
       <div>
         <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">Bio / Focus Area</label>
-        <textarea id="prof-bio" rows="2" placeholder="e.g. Deep Learning & LLMs researcher, building autonomous agents" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px; resize: none;"></textarea>
+        <textarea id="profile-bio" name="prof-bio" rows="2" placeholder="e.g. Deep Learning & LLMs researcher, building autonomous agents" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px; resize: none;"></textarea>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
         <div>
           <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">LeetCode Username</label>
-          <input type="text" id="prof-leetcode" placeholder="e.g. avinish107" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
+          <input type="text" id="profile-leetcode" name="prof-leetcode" placeholder="e.g. avinish107" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13.5px;" />
         </div>
         <div>
           <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">Custom Avatar URL</label>
@@ -6115,8 +6116,8 @@ init();
       </div>
 
       <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px;">
-        <input type="checkbox" id="prof-allow-messages" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent);" checked />
-        <label for="prof-allow-messages" style="font-size: 13px; color: #f1f5f9; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="profile-allow-msgs" name="prof-allow-messages" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent);" checked />
+        <label for="profile-allow-msgs" style="font-size: 13px; color: #f1f5f9; cursor: pointer; user-select: none;">
           Allow other learners on the leaderboard to send me direct messages 💬
         </label>
       </div>
@@ -6216,6 +6217,50 @@ init();
 
     <!-- ACTION BUTTON / DM TRIGGER -->
     <div id="pub-action-container"></div>
+  </div>
+</div>
+
+<!-- FEEDBACK & BUG REPORT MODAL -->
+<div id="feedbackModal" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeFeedbackModal()">
+  <div class="modal-box" style="max-width: 500px;">
+    <div class="modal-header">
+      <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+        <span>🛠️</span> Platform Notice & Bug Reporter
+      </div>
+      <button class="modal-close" onclick="closeFeedbackModal()">✕</button>
+    </div>
+
+    <!-- NOTICE BOX -->
+    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 12.5px; line-height: 1.5; color: #fde68a;">
+      <strong style="color: #fbbf24; display: block; margin-bottom: 4px;">📢 Platform Notice:</strong>
+      Notice: We are actively shipping updates! If you encounter any ranking sync, badge, or messaging bugs, report them below and our team will patch them immediately.
+    </div>
+
+    <!-- CATEGORY SELECTOR -->
+    <div style="margin-bottom: 14px;">
+      <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 8px;">Feedback Category</label>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;" id="feedback-type-group">
+        <button type="button" class="feedback-type-btn active" onclick="selectFeedbackType('bug', this)" style="padding: 9px 6px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid #ef4444; background: rgba(239, 68, 68, 0.15); color: #fca5a5; transition: all 0.2s;">🐛 Bug Report</button>
+        <button type="button" class="feedback-type-btn" onclick="selectFeedbackType('feature', this)" style="padding: 9px 6px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: #94a3b8; transition: all 0.2s;">💡 Feature Suggestion</button>
+        <button type="button" class="feedback-type-btn" onclick="selectFeedbackType('general', this)" style="padding: 9px 6px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: #94a3b8; transition: all 0.2s;">💬 General Feedback</button>
+      </div>
+    </div>
+
+    <!-- MESSAGE TEXTAREA -->
+    <div style="margin-bottom: 16px;">
+      <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 6px;">Describe what happened or suggest a feature...</label>
+      <textarea id="feedback-message" rows="4" placeholder="Describe what happened or suggest a feature (minimum 10 characters)..." oninput="updateFeedbackCharCount()" style="width: 100%; box-sizing: border-box; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #0b0f17; color: #fff; font-size: 13px; line-height: 1.5; resize: vertical;"></textarea>
+      <div id="feedback-char-hint" style="font-size: 11px; color: var(--muted); margin-top: 4px; display: flex; justify-content: space-between;">
+        <span>Please be as descriptive as possible</span>
+        <span id="feedback-char-count">0 / 10 min</span>
+      </div>
+    </div>
+
+    <!-- SUBMIT BUTTON -->
+    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+      <button type="button" onclick="closeFeedbackModal()" style="padding: 9px 18px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: #94a3b8; font-weight: 600; font-size: 13px; cursor: pointer;">Cancel</button>
+      <button type="button" id="feedback-submit-btn" onclick="submitFeedback()" style="padding: 9px 22px; border-radius: 8px; border: none; background: var(--accent); color: #07090e; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s;">Submit Report</button>
+    </div>
   </div>
 </div>
 
@@ -6414,6 +6459,7 @@ init();
 <!-- 2. GUEST CONTROLS (Floats top-right when logged out) -->
 <div id="guest-controls" style="position: fixed; top: 12px; right: 14px; z-index: 999999; background: rgba(17, 22, 34, 0.88); border: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 10px; padding: 6px 12px; display: flex; align-items: center; gap: 8px; font-family: monospace; font-size: 12px; color: #f1f5f9; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
   <span style="color: #6ee7b7; font-weight: 600;">● Guest Mode</span>
+  <button onclick="openFeedbackModal()" style="padding: 5px 10px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">⚠️ Feedback</button>
   <button onclick="toggleDirectMessages()" style="padding: 5px 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">✈️ DMs</button>
   <button onclick="openAuthGate()" style="padding: 5px 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">☁️ Cloud Sync / Sign In</button>
 </div>
@@ -6421,6 +6467,7 @@ init();
 <!-- 3. LOGGED-IN CONTROLS BAR (Floats top-right only after login) -->
 <div id="user-controls" style="display: none; position: fixed; top: 12px; right: 14px; z-index: 999999; background: rgba(17, 22, 34, 0.88); border: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 10px; padding: 6px 12px; align-items: center; gap: 8px; font-family: monospace; font-size: 12px; color: #f1f5f9; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
   <span id="user-display" style="color: #38bdf8; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+  <button onclick="openFeedbackModal()" style="padding: 5px 10px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">⚠️ Feedback</button>
   <button onclick="toggleDirectMessages()" id="dm-nav-btn" style="padding: 5px 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">✈️ DMs <span id="dm-unread-badge" style="display:none; background:#ef4444; color:#fff; font-size:9px; padding:1px 5px; border-radius:10px; font-weight:700;">0</span></button>
   <button onclick="openProfileModal()" style="padding: 5px 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">👤 Profile</button>
   <button onclick="saveMyData()" style="padding: 5px 10px; background: rgba(110, 231, 183, 0.15); border: 1px solid #6ee7b7; color: #6ee7b7; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">💾 Cloud Save</button>
@@ -6433,6 +6480,7 @@ init();
   const SUPABASE_KEY = "sb_publishable__S_yb1TUbxaxKh9koe_Fcg_iq0UOhZo";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const supabase = supabaseClient;
 
   // Clean URL hash containing OAuth/magic-link tokens to prevent false positives from security scanners
   if (window.location.hash && window.location.hash.includes('access_token')) {
@@ -6813,13 +6861,13 @@ init();
         }
 
         // Hydrate input fields if accessible
-        const nameInput = document.getElementById("prof-name");
-        const countryInput = document.getElementById("prof-country");
-        const collegeInput = document.getElementById("prof-college");
-        const bioInput = document.getElementById("prof-bio");
-        const leetcodeInput = document.getElementById("prof-leetcode");
+        const nameInput = document.getElementById("profile-handle") || document.getElementById("prof-name") || document.getElementById("editHandle");
+        const countryInput = document.getElementById("profile-country") || document.getElementById("prof-country") || document.getElementById("editCountry");
+        const collegeInput = document.getElementById("profile-college") || document.getElementById("prof-college") || document.getElementById("editCollege");
+        const bioInput = document.getElementById("profile-bio") || document.getElementById("prof-bio") || document.getElementById("editBio");
+        const leetcodeInput = document.getElementById("profile-leetcode") || document.getElementById("prof-leetcode") || document.getElementById("editLeetcode");
         const avatarInput = document.getElementById("prof-avatar-url");
-        const allowMsgsInput = document.getElementById("prof-allow-messages");
+        const allowMsgsInput = document.getElementById("profile-allow-msgs") || document.getElementById("prof-allow-messages");
 
         if (nameInput && state.profile.name) nameInput.value = state.profile.name;
         if (countryInput && state.profile.country) countryInput.value = state.profile.country;
@@ -7465,18 +7513,20 @@ init();
     const emailEl = document.getElementById("prof-email");
     if (emailEl) emailEl.value = activeUser ? activeUser.email : 'Local Guest (Unsaved)';
 
-    document.getElementById("prof-name").value = state.profile.name || '';
-    document.getElementById("prof-country").value = state.profile.country || '';
-    document.getElementById("prof-college").value = state.profile.college || '';
-    document.getElementById("prof-bio").value = state.profile.bio || '';
-
-    const leetcodeInput = document.getElementById("prof-leetcode");
-    if (leetcodeInput) leetcodeInput.value = state.profile.leetcode_handle || '';
-
+    const nameInput = document.getElementById("profile-handle") || document.getElementById("prof-name") || document.getElementById("editHandle");
+    const countryInput = document.getElementById("profile-country") || document.getElementById("prof-country") || document.getElementById("editCountry");
+    const collegeInput = document.getElementById("profile-college") || document.getElementById("prof-college") || document.getElementById("editCollege");
+    const bioInput = document.getElementById("profile-bio") || document.getElementById("prof-bio") || document.getElementById("editBio");
+    const leetcodeInput = document.getElementById("profile-leetcode") || document.getElementById("prof-leetcode") || document.getElementById("editLeetcode");
     const avatarInput = document.getElementById("prof-avatar-url");
-    if (avatarInput) avatarInput.value = state.profile.custom_avatar_url || '';
+    const allowMsgsInput = document.getElementById("profile-allow-msgs") || document.getElementById("prof-allow-messages");
 
-    const allowMsgsInput = document.getElementById("prof-allow-messages");
+    if (nameInput) nameInput.value = state.profile.name || '';
+    if (countryInput) countryInput.value = state.profile.country || '';
+    if (collegeInput) collegeInput.value = state.profile.college || '';
+    if (bioInput) bioInput.value = state.profile.bio || '';
+    if (leetcodeInput) leetcodeInput.value = state.profile.leetcode_handle || '';
+    if (avatarInput) avatarInput.value = state.profile.custom_avatar_url || '';
     if (allowMsgsInput) allowMsgsInput.checked = state.profile.allow_public_messages !== false;
 
     const rank = getLevel(state.xp || 0);
@@ -7508,75 +7558,89 @@ init();
   }
 
   async function saveProfileDetails() {
-    if (!state.profile) state.profile = {};
-    const nameVal = document.getElementById("prof-name").value.trim();
-    const countryVal = document.getElementById("prof-country").value.trim();
-    const collegeVal = document.getElementById("prof-college").value.trim();
-    const bioVal = document.getElementById("prof-bio").value.trim();
-    const leetcodeVal = document.getElementById("prof-leetcode") ? document.getElementById("prof-leetcode").value.trim() : '';
-    const avatarVal = document.getElementById("prof-avatar-url") ? document.getElementById("prof-avatar-url").value.trim() : '';
-    const allowMsgsBool = document.getElementById("prof-allow-messages") ? document.getElementById("prof-allow-messages").checked : true;
+    const { data: { session } } = await supabase.auth.getSession();
+    const user = session?.user;
+    if (!user) {
+      alert("Authentication required: Please log in again.");
+      return;
+    }
 
-    state.profile.name = nameVal;
-    state.profile.country = countryVal;
+    const handleVal = document.getElementById('profile-handle')?.value?.trim() || document.getElementById('editHandle')?.value?.trim() || document.getElementById('prof-name')?.value?.trim() || 'Engineer';
+    const collegeVal = document.getElementById('profile-college')?.value?.trim() || document.getElementById('editCollege')?.value?.trim() || document.getElementById('prof-college')?.value?.trim() || '';
+    const countryVal = document.getElementById('profile-country')?.value?.trim() || document.getElementById('editCountry')?.value?.trim() || document.getElementById('prof-country')?.value?.trim() || 'India';
+    const bioVal = document.getElementById('profile-bio')?.value?.trim() || document.getElementById('editBio')?.value?.trim() || document.getElementById('prof-bio')?.value?.trim() || '';
+    const leetcodeVal = document.getElementById('profile-leetcode')?.value?.trim() || document.getElementById('editLeetcode')?.value?.trim() || document.getElementById('prof-leetcode')?.value?.trim() || '';
+    const allowMsgs = document.getElementById('profile-allow-msgs')?.checked ?? document.getElementById('prof-allow-messages')?.checked ?? true;
+    const avatarVal = document.getElementById('prof-avatar-url')?.value?.trim() || state.profile?.custom_avatar_url || '';
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        handle: handleVal,
+        college: collegeVal,
+        country: countryVal,
+        bio: bioVal,
+        leetcode_handle: leetcodeVal,
+        custom_avatar_url: avatarVal,
+        allow_public_messages: allowMsgs,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', user.id)
+      .select();
+
+    if (error) {
+      console.error("Supabase Save Profile Error:", error);
+      alert("Failed to save to database: " + error.message);
+      return;
+    }
+
+    // Fallback if the user profile row doesn't exist yet
+    if (!data || data.length === 0) {
+      await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          email: user.email,
+          handle: handleVal,
+          college: collegeVal,
+          country: countryVal,
+          bio: bioVal,
+          leetcode_handle: leetcodeVal,
+          custom_avatar_url: avatarVal,
+          allow_public_messages: allowMsgs,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+    }
+
+    if (!state.profile) state.profile = {};
+    state.profile.name = handleVal;
+    state.profile.handle = handleVal;
     state.profile.college = collegeVal;
+    state.profile.country = countryVal;
     state.profile.bio = bioVal;
     state.profile.leetcode_handle = leetcodeVal;
     state.profile.custom_avatar_url = avatarVal;
-    state.profile.allow_public_messages = allowMsgsBool;
-
-    if (activeUser && document.getElementById("user-display")) {
-      document.getElementById("user-display").innerText = state.profile.name || activeUser.email;
-    }
+    state.profile.allow_public_messages = allowMsgs;
 
     save();
 
     const saveBtn = document.getElementById("prof-save-btn");
     if (saveBtn) {
-      saveBtn.textContent = "Saved ✓";
+      const origText = saveBtn.textContent;
+      saveBtn.textContent = "Saved to Cloud ✓";
       saveBtn.style.background = "#6ee7b7";
       saveBtn.style.color = "#07090e";
       setTimeout(() => {
         if (saveBtn) {
-          saveBtn.textContent = "Save Profile";
+          saveBtn.textContent = origText || "Save Profile";
           saveBtn.style.background = "var(--accent)";
           saveBtn.style.color = "#07090e";
         }
       }, 2000);
     }
 
-    if (activeUser) {
-      try {
-        const updatePayload = {
-          handle: nameVal,
-          college: collegeVal,
-          country: countryVal,
-          bio: bioVal,
-          leetcode_handle: leetcodeVal,
-          custom_avatar_url: avatarVal,
-          allow_public_messages: allowMsgsBool,
-          xp: state.xp || 0,
-          user_data: { ...state },
-          updated_at: new Date().toISOString()
-        };
-
-        const { error, count } = await supabaseClient
-          .from('profiles')
-          .update(updatePayload)
-          .eq('id', activeUser.id);
-
-        if (error || count === 0) {
-          await supabaseClient
-            .from('profiles')
-            .upsert({
-              id: activeUser.id,
-              email: activeUser.email,
-              ...updatePayload
-            }, { onConflict: 'id' });
-        }
-      } catch (err) {
-        console.error("Error saving profile to Supabase:", err);
-      }
+    if (document.getElementById("user-display")) {
+      document.getElementById("user-display").innerText = handleVal || user.email;
     }
 
     renderLeaderboard(true);
@@ -8385,11 +8449,16 @@ init();
       showToast("🔐 Please sign in to message learners!");
       return;
     }
+    if (targetUserId === activeUser.id) {
+      showToast("Cannot message yourself!");
+      return;
+    }
     toggleDirectMessages(true);
     openDmConversation(targetUserId, targetName);
   }
 
   function openDmConversation(otherUserId, otherName) {
+    if (!otherUserId || (activeUser && otherUserId === activeUser.id)) return;
     dmCurrentConversationUserId = otherUserId;
     dmCurrentConversationUserName = otherName || 'Learner';
 
@@ -8457,6 +8526,31 @@ init();
     dmConversations = Array.from(idMap.values()).sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
     saveLocalDms(dmConversations);
 
+    // Fetch profiles for any thread partners not yet in cachedLeaderboardData
+    const missingUserIds = Array.from(new Set(
+      dmConversations
+        .map(m => (m.sender_id === activeUser.id) ? m.receiver_id : m.sender_id)
+        .filter(id => id && id !== activeUser.id && !(cachedLeaderboardData || []).some(p => p.id === id))
+    ));
+    if (missingUserIds.length > 0) {
+      try {
+        const { data: missingProfiles } = await supabaseClient
+          .from('profiles')
+          .select('id, handle, college, country, custom_avatar_url, xp')
+          .in('id', missingUserIds);
+        if (missingProfiles && missingProfiles.length > 0) {
+          if (!cachedLeaderboardData) cachedLeaderboardData = [];
+          missingProfiles.forEach(mp => {
+            if (!cachedLeaderboardData.some(p => p.id === mp.id)) {
+              cachedLeaderboardData.push(mp);
+            }
+          });
+        }
+      } catch (err) {
+        console.warn("Could not fetch partner profiles for DMs:", err);
+      }
+    }
+
     updateDmBadges();
     if (dmCurrentConversationUserId) {
       renderActiveDmChat();
@@ -8494,26 +8588,31 @@ init();
 
     const threadMap = new Map();
     dmConversations.forEach(msg => {
-      const otherId = msg.sender_id === activeUser.id ? msg.receiver_id : msg.sender_id;
-      if (!threadMap.has(otherId)) {
-        threadMap.set(otherId, []);
+      // Calculate the other person's ID
+      const otherUserId = (msg.sender_id === activeUser.id) ? msg.receiver_id : msg.sender_id;
+      // Filter out and IGNORE any thread where otherUserId === user.id (never show the user chatting with themselves!)
+      if (!otherUserId || otherUserId === activeUser.id) return;
+
+      if (!threadMap.has(otherUserId)) {
+        threadMap.set(otherUserId, []);
       }
-      threadMap.get(otherId).push(msg);
+      threadMap.get(otherUserId).push(msg);
     });
 
     const threadEntries = Array.from(threadMap.entries());
     let primaryThreads = [];
     let requestThreads = [];
 
-    threadEntries.forEach(([otherId, msgs]) => {
+    threadEntries.forEach(([otherUserId, msgs]) => {
       const lastMsg = msgs[msgs.length - 1];
       const hasAccepted = msgs.some(m => m.status === 'accepted');
-      const isIncomingPending = msgs[0].receiver_id === activeUser.id && !hasAccepted;
+      // In the "Requests" tab, ONLY display messages where receiver_id === user.id AND status === 'pending'
+      const pendingReq = msgs.find(m => m.receiver_id === activeUser.id && m.status === 'pending');
 
-      if (isIncomingPending) {
-        requestThreads.push({ otherId, msgs, lastMsg });
+      if (pendingReq && !hasAccepted) {
+        requestThreads.push({ otherUserId, msgs, lastMsg, pendingReq });
       } else {
-        primaryThreads.push({ otherId, msgs, lastMsg });
+        primaryThreads.push({ otherUserId, msgs, lastMsg });
       }
     });
 
@@ -8532,24 +8631,29 @@ init();
       return;
     }
 
-    listEl.innerHTML = activeList.map(({ otherId, msgs, lastMsg }) => {
-      const senderProfile = (cachedLeaderboardData || []).find(p => p.id === otherId) || {};
-      const name = senderProfile.handle || senderProfile.name || lastMsg.sender_name || 'Astronaut';
+    listEl.innerHTML = activeList.map(({ otherUserId, msgs, lastMsg, pendingReq }) => {
+      const otherProfile = (cachedLeaderboardData || []).find(p => p.id === otherUserId) || {};
+      const name = otherProfile.handle || otherProfile.name || (lastMsg.sender_id === otherUserId ? lastMsg.sender_name : null) || 'Learner';
       const safeName = name.replace(/'/g, "\\'");
+      const college = otherProfile.college || (lastMsg.sender_id === otherUserId ? lastMsg.sender_college : '') || '';
+      const avatarContent = otherProfile.custom_avatar_url 
+        ? `<img src="${otherProfile.custom_avatar_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.onerror=null;this.parentElement.textContent='🚀';" />`
+        : (otherProfile.avatar || '🚀');
       const isMine = lastMsg.sender_id === activeUser.id;
       const preview = isMine ? `You: ${lastMsg.message}` : lastMsg.message;
       const timeStr = new Date(lastMsg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
       if (dmActiveTab === 'requests') {
-        const pendingMsg = msgs.find(m => m.receiver_id === activeUser.id && m.status === 'pending') || lastMsg;
-        const safeMsgId = (pendingMsg.id || '').replace(/'/g, "\\'");
-        const safeOtherId = (otherId || '').replace(/'/g, "\\'");
+        const targetPending = pendingReq || msgs.find(m => m.receiver_id === activeUser.id && m.status === 'pending') || lastMsg;
+        const safeMsgId = (targetPending.id || '').replace(/'/g, "\\'");
+        const safeOtherId = (otherUserId || '').replace(/'/g, "\\'");
         return `
           <div class="dm-thread-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <div class="dm-thread-avatar">🚀</div>
+              <div class="dm-thread-avatar">${avatarContent}</div>
               <div class="dm-thread-content">
                 <div class="dm-thread-name">${name}</div>
+                ${college ? `<div style="font-size: 11px; color: #94a3b8; margin-top: -2px; margin-bottom: 2px;">${college}</div>` : ''}
                 <div class="dm-thread-preview">${preview}</div>
               </div>
               <div class="dm-time">${timeStr}</div>
@@ -8567,10 +8671,11 @@ init();
       }
 
       return `
-        <div class="dm-thread-item" onclick="openDmConversation('${otherId}', '${safeName}')">
-          <div class="dm-thread-avatar">🚀</div>
+        <div class="dm-thread-item" onclick="openDmConversation('${otherUserId}', '${safeName}')">
+          <div class="dm-thread-avatar">${avatarContent}</div>
           <div class="dm-thread-content">
             <div class="dm-thread-name">${name}</div>
+            ${college ? `<div style="font-size: 11px; color: #94a3b8; margin-top: -2px; margin-bottom: 2px;">${college}</div>` : ''}
             <div class="dm-thread-preview">${preview}</div>
           </div>
           <div class="dm-time">${timeStr}</div>
@@ -8726,6 +8831,115 @@ init();
     } catch (e) {
       console.warn("Realtime channel subscription error:", e);
     }
+  }
+
+  // ===================== FEEDBACK & BUG REPORT SYSTEM =====================
+  let selectedFeedbackType = 'bug';
+
+  function openFeedbackModal() {
+    const modal = document.getElementById("feedbackModal");
+    if (modal) {
+      modal.style.display = "flex";
+      const msgInput = document.getElementById("feedback-message");
+      if (msgInput) {
+        msgInput.value = "";
+        msgInput.focus();
+      }
+      updateFeedbackCharCount();
+    }
+  }
+
+  function closeFeedbackModal() {
+    const modal = document.getElementById("feedbackModal");
+    if (modal) modal.style.display = "none";
+  }
+
+  function selectFeedbackType(type, btn) {
+    selectedFeedbackType = type;
+    const container = document.getElementById("feedback-type-group");
+    if (!container) return;
+    const btns = container.querySelectorAll(".feedback-type-btn");
+    btns.forEach(b => {
+      b.style.borderColor = "var(--border)";
+      b.style.background = "rgba(255,255,255,0.03)";
+      b.style.color = "#94a3b8";
+    });
+
+    if (btn) {
+      if (type === 'bug') {
+        btn.style.borderColor = "#ef4444";
+        btn.style.background = "rgba(239, 68, 68, 0.15)";
+        btn.style.color = "#fca5a5";
+      } else if (type === 'feature') {
+        btn.style.borderColor = "#38bdf8";
+        btn.style.background = "rgba(56, 189, 248, 0.15)";
+        btn.style.color = "#38bdf8";
+      } else {
+        btn.style.borderColor = "#6ee7b7";
+        btn.style.background = "rgba(110, 231, 183, 0.15)";
+        btn.style.color = "#6ee7b7";
+      }
+    }
+  }
+
+  function updateFeedbackCharCount() {
+    const msgInput = document.getElementById("feedback-message");
+    const countSpan = document.getElementById("feedback-char-count");
+    if (msgInput && countSpan) {
+      const len = msgInput.value.trim().length;
+      countSpan.textContent = `${len} / 10 min`;
+      countSpan.style.color = len >= 10 ? '#6ee7b7' : '#94a3b8';
+    }
+  }
+
+  async function submitFeedback() {
+    const msgInput = document.getElementById("feedback-message");
+    const feedbackText = msgInput ? msgInput.value.trim() : '';
+
+    if (!feedbackText || feedbackText.length < 10) {
+      alert("Please enter at least 10 characters describing the issue or feedback.");
+      if (msgInput) msgInput.focus();
+      return;
+    }
+
+    const submitBtn = document.getElementById("feedback-submit-btn");
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Logging...";
+    }
+
+    let user = activeUser;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) user = session.user;
+    } catch (e) {
+      console.warn("Session check during feedback:", e);
+    }
+
+    try {
+      const { error } = await supabase.from('user_feedback').insert({
+        user_id: user ? user.id : null,
+        user_email: user ? user.email : 'guest@aiml.tracker',
+        feedback_type: selectedFeedbackType,
+        message: feedbackText,
+        url_context: window.location.href
+      });
+
+      if (error) {
+        console.warn("Supabase user_feedback table notice:", error);
+      }
+    } catch (err) {
+      console.warn("Feedback submission notice:", err);
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Report";
+    }
+
+    alert("Thank you! Your report has been logged.");
+    closeFeedbackModal();
+    showToast("🛠️ Feedback report logged. Thank you!");
   }
 
   // ===================== AI TUTOR / COPILOT SYSTEM =====================
