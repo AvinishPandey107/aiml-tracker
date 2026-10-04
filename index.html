@@ -7170,13 +7170,140 @@ init();
     "nus": ["National University of Singapore (NUS)"]
   };
 
-  const PRECOMPILED_COLLEGES = Object.values(INDIAN_STATE_COLLEGES).flat();
+  const STATE_EXAM_COLLEGES = [
+    // Karnataka (KCET / COMEDK)
+    "Bangalore Institute of Technology (BIT)", "RV College of Engineering (RVCE)", "BMS College of Engineering (BMSCE)", "M.S. Ramaiah Institute of Technology (MSRIT)", "University Visvesvaraya College of Engineering (UVCE)", "PES University", "Dayananda Sagar College of Engineering (DSCE)", "Siddaganga Institute of Technology (SIT Tumkur)", "The National Institute of Engineering (NIE Mysore)", "JSS Science and Technology University (SJCE)", "BMSIT Bangalore", "Nitte Meenakshi Institute of Technology (NMIT)", "Sir M. Visvesvaraya Institute of Technology (SMVIT)", "New Horizon College of Engineering (NHCE)", "PES Institute of Technology (PESITM Shivamogga)", "KLE Technological University",
+
+    // Maharashtra (MHT-CET)
+    "COEP Technological University Pune", "Veermata Jijabai Technological Institute (VJTI Mumbai)", "Sardar Patel Institute of Technology (SPIT Mumbai)", "Pune Institute of Computer Technology (PICT)", "Walchand College of Engineering Sangli", "Vishwakarma Institute of Technology (VIT Pune)", "Pimpri Chinchwad College of Engineering (PCCOE)", "Institute of Chemical Technology (ICT Mumbai)", "Government College of Engineering Aurangabad", "Government College of Engineering Amravati",
+
+    // Delhi NCR (JAC Delhi / IPU CET)
+    "Delhi Technological University (DTU)", "Netaji Subhas University of Technology (NSUT)", "Indira Gandhi Delhi Technical University for Women (IGDTUW)", "Maharaja Agrasen Institute of Technology (MAIT)", "Maharaja Surajmal Institute of Technology (MSIT)", "Bharati Vidyapeeth's College of Engineering (BVCOE New Delhi)",
+
+    // West Bengal (WBJEE)
+    "Jadavpur University (JU Kolkata)", "Heritage Institute of Technology Kolkata", "Institute of Engineering and Management (IEM Kolkata)", "Kalyani Government Engineering College (KGEC)", "Jalpaiguri Government Engineering College (JGEC)", "Haldia Institute of Technology", "Techno India University",
+
+    // Tamil Nadu (TNEA)
+    "College of Engineering, Guindy (CEG Anna University)", "Madras Institute of Technology (MIT Chennai)", "PSG College of Technology Coimbatore", "SSN College of Engineering", "Coimbatore Institute of Technology (CIT)", "Thiagarajar College of Engineering (TCE Madurai)", "Government College of Technology (GCT Coimbatore)", "Kumaraguru College of Technology (KCT)",
+
+    // Telangana & Andhra Pradesh (TS EAPCET & AP EAPCET)
+    "JNTUH University College of Engineering Hyderabad", "Osmania University College of Engineering (OUCE)", "Chaitanya Bharathi Institute of Technology (CBIT Hyderabad)", "VNR Vignana Jyothi Institute (VNR VJIET)", "Vasavi College of Engineering", "Gokaraju Rangaraju Institute (GRIET)", "Andhra University College of Engineering (AUCE Visakhapatnam)", "JNTU College of Engineering Kakinada", "Sri Venkateswara University College of Engineering (SVUCE Tirupati)", "Gayatri Vidya Parishad College of Engineering (GVPCE)",
+
+    // Uttar Pradesh (UPTAC / AKTU)
+    "Institute of Engineering and Technology (IET Lucknow)", "Kamla Nehru Institute of Technology (KNIT Sultanpur)", "Bundelkhand Institute of Engineering & Technology (BIET Jhansi)", "JSS Academy of Technical Education (JSSATE Noida)", "Galgotias College of Engineering and Technology (GCET)", "KIET Group of Institutions Ghaziabad", "Ajay Kumar Garg Engineering College (AKGEC Ghaziabad)", "Harcourt Butler Technical University (HBTU Kanpur)",
+
+    // Kerala (KEAM)
+    "College of Engineering Trivandrum (CET)", "Government Engineering College Thrissur (GECT)", "Model Engineering College (MEC Kochi)", "TKM College of Engineering Kollam", "Government Engineering College Barton Hill Trivandrum",
+
+    // Gujarat (GUJCET / ACPC)
+    "L.D. College of Engineering (LDCE Ahmedabad)", "Birla Vishvakarma Mahavidyalaya (BVM Anand)", "Vishwakarma Government Engineering College (VGEC Chandkheda)", "Dharmsinh Desai University (DDU Nadiad)", "Pandit Deendayal Energy University (PDEU)",
+
+    // Central CFTIs (IITs, NITs, IIITs)
+    "IIIT Allahabad", "IIIT Bangalore", "IIIT Hyderabad", "IIIT Delhi", "IIIT Lucknow", "IIT Bombay", "IIT Delhi", "IIT Madras", "IIT Kanpur", "IIT Kharagpur", "IIT Roorkee", "NIT Trichy", "NIT Surathkal", "NIT Warangal", "NIT Calicut", "NIT Rourkela", "MNNIT Allahabad", "VNIT Nagpur"
+  ];
+
+  const STATE_EXAM_MAP = {
+    "kcet": [
+      "Bangalore Institute of Technology (BIT)", "RV College of Engineering (RVCE)", "BMS College of Engineering (BMSCE)",
+      "M.S. Ramaiah Institute of Technology (MSRIT)", "University Visvesvaraya College of Engineering (UVCE)",
+      "PES University", "Dayananda Sagar College of Engineering (DSCE)", "Siddaganga Institute of Technology (SIT Tumkur)",
+      "The National Institute of Engineering (NIE Mysore)", "JSS Science and Technology University (SJCE)",
+      "BMSIT Bangalore", "Nitte Meenakshi Institute of Technology (NMIT)", "Sir M. Visvesvaraya Institute of Technology (SMVIT)",
+      "New Horizon College of Engineering (NHCE)", "PES Institute of Technology (PESITM Shivamogga)", "KLE Technological University"
+    ],
+    "comedk": [
+      "Bangalore Institute of Technology (BIT)", "RV College of Engineering (RVCE)", "BMS College of Engineering (BMSCE)",
+      "M.S. Ramaiah Institute of Technology (MSRIT)", "PES University", "Dayananda Sagar College of Engineering (DSCE)",
+      "Siddaganga Institute of Technology (SIT Tumkur)", "The National Institute of Engineering (NIE Mysore)",
+      "JSS Science and Technology University (SJCE)", "BMSIT Bangalore", "Nitte Meenakshi Institute of Technology (NMIT)",
+      "Sir M. Visvesvaraya Institute of Technology (SMVIT)", "New Horizon College of Engineering (NHCE)", "KLE Technological University"
+    ],
+    "mht-cet": [
+      "COEP Technological University Pune", "Veermata Jijabai Technological Institute (VJTI Mumbai)",
+      "Sardar Patel Institute of Technology (SPIT Mumbai)", "Pune Institute of Computer Technology (PICT)",
+      "Walchand College of Engineering Sangli", "Vishwakarma Institute of Technology (VIT Pune)",
+      "Pimpri Chinchwad College of Engineering (PCCOE)", "Institute of Chemical Technology (ICT Mumbai)",
+      "Government College of Engineering Aurangabad", "Government College of Engineering Amravati"
+    ],
+    "mhtcet": [
+      "COEP Technological University Pune", "Veermata Jijabai Technological Institute (VJTI Mumbai)",
+      "Sardar Patel Institute of Technology (SPIT Mumbai)", "Pune Institute of Computer Technology (PICT)",
+      "Walchand College of Engineering Sangli", "Vishwakarma Institute of Technology (VIT Pune)",
+      "Pimpri Chinchwad College of Engineering (PCCOE)", "Institute of Chemical Technology (ICT Mumbai)",
+      "Government College of Engineering Aurangabad", "Government College of Engineering Amravati"
+    ],
+    "wbjee": [
+      "Jadavpur University (JU Kolkata)", "Heritage Institute of Technology Kolkata",
+      "Institute of Engineering and Management (IEM Kolkata)", "Kalyani Government Engineering College (KGEC)",
+      "Jalpaiguri Government Engineering College (JGEC)", "Haldia Institute of Technology", "Techno India University"
+    ],
+    "tnea": [
+      "College of Engineering, Guindy (CEG Anna University)", "Madras Institute of Technology (MIT Chennai)",
+      "PSG College of Technology Coimbatore", "SSN College of Engineering", "Coimbatore Institute of Technology (CIT)",
+      "Thiagarajar College of Engineering (TCE Madurai)", "Government College of Technology (GCT Coimbatore)",
+      "Kumaraguru College of Technology (KCT)"
+    ],
+    "eapcet": [
+      "JNTUH University College of Engineering Hyderabad", "Osmania University College of Engineering (OUCE)",
+      "Chaitanya Bharathi Institute of Technology (CBIT Hyderabad)", "VNR Vignana Jyothi Institute (VNR VJIET)",
+      "Vasavi College of Engineering", "Gokaraju Rangaraju Institute (GRIET)",
+      "Andhra University College of Engineering (AUCE Visakhapatnam)", "JNTU College of Engineering Kakinada",
+      "Sri Venkateswara University College of Engineering (SVUCE Tirupati)",
+      "Gayatri Vidya Parishad College of Engineering (GVPCE)"
+    ],
+    "ts eapcet": [
+      "JNTUH University College of Engineering Hyderabad", "Osmania University College of Engineering (OUCE)",
+      "Chaitanya Bharathi Institute of Technology (CBIT Hyderabad)", "VNR Vignana Jyothi Institute (VNR VJIET)",
+      "Vasavi College of Engineering", "Gokaraju Rangaraju Institute (GRIET)"
+    ],
+    "ap eapcet": [
+      "Andhra University College of Engineering (AUCE Visakhapatnam)", "JNTU College of Engineering Kakinada",
+      "Sri Venkateswara University College of Engineering (SVUCE Tirupati)",
+      "Gayatri Vidya Parishad College of Engineering (GVPCE)"
+    ],
+    "uptac": [
+      "Institute of Engineering and Technology (IET Lucknow)", "Kamla Nehru Institute of Technology (KNIT Sultanpur)",
+      "Bundelkhand Institute of Engineering & Technology (BIET Jhansi)", "JSS Academy of Technical Education (JSSATE Noida)",
+      "Galgotias College of Engineering and Technology (GCET)", "KIET Group of Institutions Ghaziabad",
+      "Ajay Kumar Garg Engineering College (AKGEC Ghaziabad)", "Harcourt Butler Technical University (HBTU Kanpur)"
+    ],
+    "aktu": [
+      "Institute of Engineering and Technology (IET Lucknow)", "Kamla Nehru Institute of Technology (KNIT Sultanpur)",
+      "Bundelkhand Institute of Engineering & Technology (BIET Jhansi)", "JSS Academy of Technical Education (JSSATE Noida)",
+      "Galgotias College of Engineering and Technology (GCET)", "KIET Group of Institutions Ghaziabad",
+      "Ajay Kumar Garg Engineering College (AKGEC Ghaziabad)", "Harcourt Butler Technical University (HBTU Kanpur)"
+    ],
+    "keam": [
+      "College of Engineering Trivandrum (CET)", "Government Engineering College Thrissur (GECT)",
+      "Model Engineering College (MEC Kochi)", "TKM College of Engineering Kollam",
+      "Government Engineering College Barton Hill Trivandrum"
+    ],
+    "gujcet": [
+      "L.D. College of Engineering (LDCE Ahmedabad)", "Birla Vishvakarma Mahavidyalaya (BVM Anand)",
+      "Vishwakarma Government Engineering College (VGEC Chandkheda)", "Dharmsinh Desai University (DDU Nadiad)",
+      "Pandit Deendayal Energy University (PDEU)"
+    ],
+    "jac delhi": [
+      "Delhi Technological University (DTU)", "Netaji Subhas University of Technology (NSUT)",
+      "Indira Gandhi Delhi Technical University for Women (IGDTUW)", "Maharaja Agrasen Institute of Technology (MAIT)",
+      "Maharaja Surajmal Institute of Technology (MSIT)", "Bharati Vidyapeeth's College of Engineering (BVCOE New Delhi)"
+    ],
+    "ipu cet": [
+      "Maharaja Agrasen Institute of Technology (MAIT)", "Maharaja Surajmal Institute of Technology (MSIT)",
+      "Bharati Vidyapeeth's College of Engineering (BVCOE New Delhi)"
+    ]
+  };
+
+  const PRECOMPILED_COLLEGES = Array.from(new Set([
+    ...STATE_EXAM_COLLEGES,
+    ...Object.values(INDIAN_STATE_COLLELESS = typeof INDIAN_STATE_COLLEGES !== 'undefined' ? INDIAN_STATE_COLLEGES : {}).flat()
+  ]));
 
   let collegeSearchTimer = null;
   let collegeAbortController = null;
 
   function filterLocalColleges(query) {
-    if (!query) return PRECOMPILED_COLLEGES;
+    if (!query) return STATE_EXAM_COLLEGES;
     const q = query.toLowerCase().trim();
     const matched = [];
     const seen = new Set();
@@ -7190,30 +7317,50 @@ init();
       }
     }
 
-    // 1. Check state names & aliases (e.g. "Karnataka", "UP", "Pune", "Allahabad", "Noida")
-    for (const [state, aliases] of Object.entries(STATE_SEARCH_ALIASES)) {
-      const stateMatch = state.toLowerCase().includes(q) || aliases.some(alias => alias === q || (q.length >= 3 && alias.includes(q)) || (alias.length >= 3 && q.includes(alias)));
-      if (stateMatch && INDIAN_STATE_COLLEGES[state]) {
-        INDIAN_STATE_COLLEGES[state].forEach(c => add(c));
+    // 0. Check Entrance Exam mapping (KCET, COMEDK, MHT-CET, WBJEE, TNEA, TS/AP EAPCET, UPTAC, KEAM, GUJCET, JAC Delhi)
+    for (const [examKey, colleges] of Object.entries(STATE_EXAM_MAP)) {
+      if (examKey === q || q.includes(examKey) || (q.length >= 3 && examKey.includes(q))) {
+        colleges.forEach(c => add(c));
       }
     }
 
-    // 2. Check acronym map (e.g. "BIT", "RVCE", "COEP", "DTU")
-    if (ACRONYM_COLLEGES_MAP[q]) {
+    // 1. Search STATE_EXAM_COLLEGES first for instant matches (e.g. typing "CET", "BIT", "VJTI", "COEP", "IIIT", or any college keyword)
+    if (q === 'cet') {
+      STATE_EXAM_COLLEGES.filter(c => c.includes('CET') || c.includes('College of Engineering') || c.includes('Technology')).forEach(c => add(c));
+    } else if (q === 'bit') {
+      STATE_EXAM_COLLEGES.filter(c => c.includes('BIT') || c.toLowerCase().includes('bangalore institute')).forEach(c => add(c));
+    } else if (q === 'iiit') {
+      STATE_EXAM_COLLEGES.filter(c => c.includes('IIIT')).forEach(c => add(c));
+    } else if (q === 'iit') {
+      STATE_EXAM_COLLEGES.filter(c => (c.startsWith('IIT ') || c.includes('IIT BHU') || c.includes('IIT(')) && !c.includes('IIIT')).forEach(c => add(c));
+      STATE_EXAM_COLLEGES.filter(c => c.includes('IIT')).forEach(c => add(c));
+    } else if (q === 'nit') {
+      STATE_EXAM_COLLEGES.filter(c => c.includes('NIT ') || c.includes('MNNIT') || c.includes('VNIT')).forEach(c => add(c));
+    }
+
+    // Acronym map lookup
+    if (typeof ACRONYM_COLLEGES_MAP !== 'undefined' && ACRONYM_COLLEGES_MAP[q]) {
       ACRONYM_COLLEGES_MAP[q].forEach(c => add(c));
     }
 
-    // 3. Category shortcuts: "iit", "iiit", "nit", "bit"
-    if (q === 'iit') {
-      PRECOMPILED_COLLEGES.filter(c => (c.startsWith('IIT ') || c.includes('IIT BHU') || c.includes('IIT(')) && !c.includes('IIIT')).forEach(c => add(c));
-      PRECOMPILED_COLLEGES.filter(c => c.includes('IIT')).forEach(c => add(c));
-    } else if (q === 'iiit') {
-      PRECOMPILED_COLLEGES.filter(c => c.includes('IIIT') || c.toLowerCase().includes('information technology')).forEach(c => add(c));
-    } else if (q === 'nit') {
-      PRECOMPILED_COLLEGES.filter(c => c.includes('NIT ') || c.toLowerCase().includes('national institute of technology')).forEach(c => add(c));
+    // Direct substring search across STATE_EXAM_COLLEGES first
+    STATE_EXAM_COLLEGES.forEach(c => {
+      if (c.toLowerCase().includes(q)) {
+        add(c);
+      }
+    });
+
+    // 2. Check state names & regional directory search (Karnataka, UP, Maharashtra, Pune, etc.)
+    if (typeof STATE_SEARCH_ALIASES !== 'undefined' && typeof INDIAN_STATE_COLLEGES !== 'undefined') {
+      for (const [state, aliases] of Object.entries(STATE_SEARCH_ALIASES)) {
+        const stateMatch = state.toLowerCase().includes(q) || aliases.some(alias => alias === q || (q.length >= 3 && alias.includes(q)) || (alias.length >= 3 && q.includes(alias)));
+        if (stateMatch && INDIAN_STATE_COLLEGES[state]) {
+          INDIAN_STATE_COLLEGES[state].forEach(c => add(c));
+        }
+      }
     }
 
-    // 4. Substring search across all institutions
+    // 3. Fallback to PRECOMPILED_COLLEGES master list
     PRECOMPILED_COLLEGES.forEach(c => {
       if (c.toLowerCase().includes(q)) {
         add(c);
@@ -7240,15 +7387,15 @@ init();
         collegeAbortController = null;
       }
       clearTimeout(collegeSearchTimer);
-      updateCollegeDatalist(PRECOMPILED_COLLEGES);
+      updateCollegeDatalist(STATE_EXAM_COLLEGES);
       return;
     }
 
-    // 1. Instant local fallback matching (zero latency) across all 28 states & UTs
+    // 1. Instant local fallback matching (zero latency) searching STATE_EXAM_COLLEGES first
     const localMatches = filterLocalColleges(query);
     updateCollegeDatalist(localMatches);
 
-    // 2. Debounced API query (300ms) with country=India as requested
+    // 2. Concurrently fetch matching global/Indian institutions (debounced 300ms)
     clearTimeout(collegeSearchTimer);
     collegeSearchTimer = setTimeout(async () => {
       if (collegeAbortController) {
