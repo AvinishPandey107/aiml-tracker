@@ -6480,7 +6480,9 @@ init();
   const SUPABASE_KEY = "sb_publishable__S_yb1TUbxaxKh9koe_Fcg_iq0UOhZo";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  const supabase = supabaseClient;
+  var supabase = supabaseClient;
+  window.supabase = supabaseClient;
+  window.supabaseClient = supabaseClient;
 
   // Clean URL hash containing OAuth/magic-link tokens to prevent false positives from security scanners
   if (window.location.hash && window.location.hash.includes('access_token')) {
